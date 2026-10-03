@@ -297,8 +297,12 @@ function getAnalysisSnapshot(): AnalysisStoreState {
   return memoryState;
 }
 
+let serverSnapshotCache: AnalysisStoreState | null = null;
 function getServerAnalysisSnapshot(): AnalysisStoreState {
-  return generateInitialMockAnalyses();
+  if (!serverSnapshotCache) {
+    serverSnapshotCache = generateInitialMockAnalyses();
+  }
+  return serverSnapshotCache;
 }
 
 const AnalysisContext = createContext<AnalysisContextType | undefined>(
