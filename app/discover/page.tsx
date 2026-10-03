@@ -1,61 +1,183 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { AIActionButton } from "@/components/ui/AIActionButton";
-import { AIBadge } from "@/components/ui/AIBadge";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Select } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { mockProspects, ExtendedProspect } from "@/lib/mock-data/prospects";
+import { EmptyStateCard } from "@/components/ui/EmptyStateCard";
+import { DiscoveryBusinessCard } from "@/components/prospects/DiscoveryBusinessCard";
+import { ResearchDrawer } from "@/components/prospects/ResearchDrawer";
+import { useProspects } from "@/lib/store/prospects-store";
+import { BusinessProspect } from "@/types/prospects";
 import {
-  RiBuilding4Line,
-  RiMapPin2Line,
-  RiGlobalLine,
-  RiInstagramLine,
-  RiWhatsappLine,
   RiSparkling2Fill,
+  RiFilterLine,
+  RiRefreshLine,
   RiCheckLine,
-  RiArrowRightLine,
   RiCloseLine,
+  RiCompass3Line,
 } from "react-icons/ri";
 
 export default function DiscoverPage() {
+  const { businesses, addProspect } = useProspects();
+
+  // Search & Filter States
   const [search, setSearch] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
-  const [hasInstagram, setHasInstagram] = useState(false);
-  const [hasWhatsApp, setHasWhatsApp] = useState(false);
-  const [analyzingBusiness, setAnalyzingBusiness] = useState<ExtendedProspect | null>(null);
-  const [isSaved, setIsSaved] = useState(false);
+  const [selectedOpportunity, setSelectedOpportunity] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [hasWebsiteOnly, setHasWebsiteOnly] = useState(false);
+  const [hasInstagramOnly, setHasInstagramOnly] = useState(false);
+  const [hasWhatsAppOnly, setHasWhatsAppOnly] = useState(false);
+  const [hasFacebookOnly, setHasFacebookOnly] = useState(false);
+  const [sortBy, setSortBy] = useState("fit_desc");
 
-  const filteredBusinesses = mockProspects.filter((biz) => {
-    const matchesSearch =
-      search === "" ||
-      biz.businessName.toLowerCase().includes(search.toLowerCase()) ||
-      biz.industry.toLowerCase().includes(search.toLowerCase()) ||
-      biz.location.toLowerCase().includes(search.toLowerCase());
+  // Drawer & Alert State
+  const [researchingBusiness, setResearchingBusiness] =
+    useState<BusinessProspect | null>(null);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
 
-    const matchesIndustry =
-      selectedIndustry === "All" || biz.industry.toLowerCase() === selectedIndustry.toLowerCase();
+  // Example search queries suggested by prompt
+  const sampleQueries = [
+    "Hotels in Srinagar",
+    "Clinics in Delhi",
+    "Real estate in Mumbai",
+    "Restaurants in Delhi",
+    "Real estate in Dubai",
+    "Travel in Kashmir",
+  ];
 
-    const matchesLocation =
-      selectedLocation === "All" || biz.location.toLowerCase() === selectedLocation.toLowerCase();
+  const handleApplyQuery = (query: string) => {
+    setSearch(query);
+  };
 
-    const matchesIg = !hasInstagram || !!biz.socialHandles.instagram;
-    const matchesWa = !hasWhatsApp || !!biz.socialHandles.whatsapp;
+  const handleClearFilters = () => {
+    setSearch("");
+    setSelectedIndustry("All");
+    setSelectedLocation("All");
+    setSelectedOpportunity("All");
+    setSelectedStatus("All");
+    setHasWebsiteOnly(false);
+    setHasInstagramOnly(false);
+    setHasWhatsAppOnly(false);
+    setHasFacebookOnly(false);
+    setSortBy("fit_desc");
+  };
 
-    return matchesSearch && matchesIndustry && matchesLocation && matchesIg && matchesWa;
-  });
+  const isFilterActive =
+    search !== "" ||
+    selectedIndustry !== "All" ||
+    selectedLocation !== "All" ||
+    selectedOpportunity !== "All" ||
+    selectedStatus !== "All" ||
+    hasWebsiteOnly ||
+    hasInstagramOnly ||
+    hasWhatsAppOnly ||
+    hasFacebookOnly ||
+    sortBy !== "fit_desc";
+
+  // Filter & Sort Logic
+  const filteredBusinesses = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    return businesses
+      .filter((biz) => {
+        // Broad search matching name, industry, category, location, city, or pain points
+        const matchesSearch =
+          !query ||
+          biz.businessName.toLowerCase().includes(query) ||
+          biz.industry.toLowerCase().includes(query) ||
+          biz.category.toLowerCase().includes(query) ||
+          biz.location.toLowerCase().includes(query) ||
+          biz.city.toLowerCase().includes(query) ||
+          biz.identifiedPainPoints.some((p) => p.toLowerCase().includes(query));
+
+        // Industry filter
+        const matchesIndustry =
+          selectedIndustry === "All" ||
+          biz.industry.toLowerCase() === selectedIndustry.toLowerCase();
+
+        // Location filter
+        const matchesLocation =
+          selectedLocation === "All" ||
+          biz.location.toLowerCase().includes(selectedLocation.toLowerCase()) ||
+          biz.city.toLowerCase() === selectedLocation.toLowerCase();
+
+        // Opportunity level filter
+        const matchesOpportunity =
+          selectedOpportunity === "All" ||
+          biz.opportunityLevel.toLowerCase() ===
+            selectedOpportunity.toLowerCase();
+
+        // Status filter
+        const matchesStatus =
+          selectedStatus === "All" ||
+          biz.status.toLowerCase() === selectedStatus.toLowerCase();
+
+        // Channel filters
+        const matchesWebsite = !hasWebsiteOnly || biz.hasWebsite;
+        const matchesIg =
+          !hasInstagramOnly || !!biz.socialPresence.instagram?.active;
+        const matchesWa =
+          !hasWhatsAppOnly ||
+          !!biz.socialPresence.whatsapp?.businessVerified;
+        const matchesFb =
+          !hasFacebookOnly || !!biz.socialPresence.facebook?.active;
+
+        return (
+          matchesSearch &&
+          matchesIndustry &&
+          matchesLocation &&
+          matchesOpportunity &&
+          matchesStatus &&
+          matchesWebsite &&
+          matchesIg &&
+          matchesWa &&
+          matchesFb
+        );
+      })
+      .sort((a, b) => {
+        if (sortBy === "fit_desc") return b.nexusFitScore - a.nexusFitScore;
+        if (sortBy === "fit_asc") return a.nexusFitScore - b.nexusFitScore;
+        if (sortBy === "alpha")
+          return a.businessName.localeCompare(b.businessName);
+        if (sortBy === "recent_discovered")
+          return (
+            new Date(b.discoveredAt).getTime() -
+            new Date(a.discoveredAt).getTime()
+          );
+        return 0;
+      });
+  }, [
+    businesses,
+    search,
+    selectedIndustry,
+    selectedLocation,
+    selectedOpportunity,
+    selectedStatus,
+    hasWebsiteOnly,
+    hasInstagramOnly,
+    hasWhatsAppOnly,
+    hasFacebookOnly,
+    sortBy,
+  ]);
+
+  const handleAddToProspects = (biz: BusinessProspect) => {
+    addProspect(biz.id);
+    setAddedToast(`Added "${biz.businessName}" to active prospects.`);
+    setTimeout(() => setAddedToast(null), 3500);
+  };
 
   return (
     <AppLayout>
       <PageHeader
         title="Discover Businesses"
-        subtitle="Find potential businesses and identify opportunities for AI-powered customer acquisition."
+        subtitle="Find businesses that may benefit from NEXUS AI and identify potential acquisition opportunities."
         badge={
           <span className="text-xs font-semibold text-[#8B5CF6] bg-[#F5F3FF] border border-[#DDD6FE] px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
             <RiSparkling2Fill className="h-3.5 w-3.5 text-[#8B5CF6]" />
@@ -63,258 +185,243 @@ export default function DiscoverPage() {
           </span>
         }
         actions={
-          <AIActionButton
-            label="Scan New Market"
-            size="sm"
-            variant="solid"
-            onClick={() => setAnalyzingBusiness(mockProspects[0])}
-          />
+          <div className="flex items-center gap-2">
+            {isFilterActive && (
+              <Button
+                size="sm"
+                variant="secondary"
+                leftIcon={<RiRefreshLine className="h-3.5 w-3.5" />}
+                onClick={handleClearFilters}
+              >
+                Clear Filters
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              leftIcon={<RiCompass3Line className="h-3.5 w-3.5 text-[#2563EB]" />}
+              onClick={() => {
+                const randomBiz =
+                  businesses[Math.floor(Math.random() * businesses.length)];
+                setResearchingBusiness(randomBiz);
+              }}
+            >
+              Random Market Deep Dive
+            </Button>
+          </div>
         }
       />
 
+      {/* Toast Notification */}
+      {addedToast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#0F172A] text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-[#334155] animate-in fade-in slide-in-from-bottom-2 duration-150">
+          <div className="p-1 rounded-full bg-[#10B981] text-white">
+            <RiCheckLine className="h-4 w-4" />
+          </div>
+          <span className="text-xs font-medium">{addedToast}</span>
+          <button
+            type="button"
+            onClick={() => setAddedToast(null)}
+            className="text-[#94A3B8] hover:text-white p-1"
+          >
+            <RiCloseLine className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
       <div className="space-y-6">
-        {/* Search & Filter Bar */}
-        <Card padding="md" className="border-[#E2E8F0] space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Prominent Search & Multi-Filter Workspace */}
+        <Card padding="md" className="border-[#E2E8F0] space-y-4 shadow-xs">
+          {/* Main Search Input */}
+          <div className="relative">
             <SearchInput
-              placeholder="Search by business name or keyword..."
+              placeholder="Search businesses, industries or locations (e.g. Hotels in Srinagar, Clinics in Delhi, Real estate in Dubai)..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onClear={() => setSearch("")}
+              className="text-sm py-2.5"
             />
+          </div>
 
+          {/* Quick Query Suggestions */}
+          <div className="flex items-center gap-2 flex-wrap text-xs">
+            <span className="text-[#64748B] font-semibold text-[11px]">
+              Suggestions:
+            </span>
+            {sampleQueries.map((q) => (
+              <button
+                key={q}
+                type="button"
+                onClick={() => handleApplyQuery(q)}
+                className={`px-2 py-0.5 rounded-full border text-[11px] transition-colors ${
+                  search.toLowerCase() === q.toLowerCase()
+                    ? "bg-[#EFF6FF] text-[#2563EB] border-[#BFDBFE] font-bold"
+                    : "bg-[#F8FAFC] text-[#475569] border-[#E2E8F0] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
+                }`}
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+
+          {/* Structured Dropdown Selectors */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2 border-t border-[#F1F5F9]">
             <Select
+              label="Industry"
               options={[
                 { label: "All Industries", value: "All" },
                 { label: "Hospitality", value: "Hospitality" },
                 { label: "Healthcare", value: "Healthcare" },
                 { label: "Real Estate", value: "Real Estate" },
-                { label: "Healthcare & Aesthetics", value: "Healthcare & Aesthetics" },
+                { label: "Travel & Tourism", value: "Travel & Tourism" },
+                { label: "Restaurants & Dining", value: "Restaurants & Dining" },
+                { label: "Education & Coaching", value: "Education & Coaching" },
+                { label: "Professional Services", value: "Professional Services" },
               ]}
               value={selectedIndustry}
               onChange={(e) => setSelectedIndustry(e.target.value)}
             />
 
             <Select
+              label="Location / City"
               options={[
                 { label: "All Locations", value: "All" },
-                { label: "Srinagar", value: "Srinagar" },
-                { label: "Delhi", value: "Delhi" },
+                { label: "Srinagar, Kashmir", value: "Srinagar" },
+                { label: "New Delhi", value: "Delhi" },
                 { label: "Mumbai", value: "Mumbai" },
-                { label: "Miami, FL", value: "Miami, FL" },
+                { label: "Dubai, UAE", value: "Dubai" },
+                { label: "Bengaluru", value: "Bengaluru" },
+                { label: "Leh Ladakh", value: "Leh" },
+                { label: "Miami, FL", value: "Miami" },
+                { label: "Noida, UP", value: "Noida" },
               ]}
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
             />
+
+            <Select
+              label="Opportunity Level"
+              options={[
+                { label: "All Levels", value: "All" },
+                { label: "High Opportunity", value: "High" },
+                { label: "Medium Opportunity", value: "Medium" },
+                { label: "Low Opportunity", value: "Low" },
+              ]}
+              value={selectedOpportunity}
+              onChange={(e) => setSelectedOpportunity(e.target.value)}
+            />
+
+            <Select
+              label="Pipeline Status"
+              options={[
+                { label: "All Statuses", value: "All" },
+                { label: "Found", value: "Found" },
+                { label: "Researching", value: "Researching" },
+                { label: "Qualified", value: "Qualified" },
+                { label: "Demo Ready", value: "Demo Ready" },
+                { label: "Contacted", value: "Contacted" },
+              ]}
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+            />
+
+            <Select
+              label="Sort By"
+              options={[
+                { label: "Highest Potential Fit", value: "fit_desc" },
+                { label: "Lowest Potential Fit", value: "fit_asc" },
+                { label: "Recently Discovered", value: "recent_discovered" },
+                { label: "Alphabetical (A-Z)", value: "alpha" },
+              ]}
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            />
           </div>
 
-          <div className="flex items-center gap-6 pt-2 border-t border-[#F1F5F9] flex-wrap">
-            <span className="text-xs font-semibold text-[#64748B]">Channel Filters:</span>
+          {/* Channel Filter Checkboxes */}
+          <div className="flex items-center gap-6 pt-3 border-t border-[#F1F5F9] flex-wrap text-xs">
+            <span className="font-semibold text-[#64748B] flex items-center gap-1">
+              <RiFilterLine className="h-3.5 w-3.5 text-[#2563EB]" />
+              Digital Presence Filters:
+            </span>
             <Checkbox
-              checked={hasInstagram}
-              onChange={(e) => setHasInstagram(e.target.checked)}
-              label="Has Instagram Account"
+              checked={hasWebsiteOnly}
+              onChange={(e) => setHasWebsiteOnly(e.target.checked)}
+              label="Active Website"
             />
             <Checkbox
-              checked={hasWhatsApp}
-              onChange={(e) => setHasWhatsApp(e.target.checked)}
-              label="Has WhatsApp Business"
+              checked={hasInstagramOnly}
+              onChange={(e) => setHasInstagramOnly(e.target.checked)}
+              label="Instagram Profile"
+            />
+            <Checkbox
+              checked={hasWhatsAppOnly}
+              onChange={(e) => setHasWhatsAppOnly(e.target.checked)}
+              label="WhatsApp Business Line"
+            />
+            <Checkbox
+              checked={hasFacebookOnly}
+              onChange={(e) => setHasFacebookOnly(e.target.checked)}
+              label="Facebook Page"
             />
           </div>
         </Card>
 
-        {/* Business Results List */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs text-[#64748B]">
+        {/* Discovery Results Header */}
+        <div className="flex items-center justify-between text-xs text-[#64748B] px-1">
+          <div className="flex items-center gap-2">
             <span>
-              Showing <strong className="text-[#0F172A]">{filteredBusinesses.length}</strong> target businesses
+              Showing <strong className="text-[#0F172A]">{filteredBusinesses.length}</strong> discovered businesses
             </span>
-            <span>Sorted by AI Relevance Score</span>
+            <span>·</span>
+            <span>
+              <strong className="text-[#2563EB]">
+                {filteredBusinesses.filter((b) => b.isProspect).length}
+              </strong>{" "}
+              already in active prospects
+            </span>
           </div>
 
+          {isFilterActive && (
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="text-[#2563EB] hover:underline font-medium text-xs"
+            >
+              Reset all filters
+            </button>
+          )}
+        </div>
+
+        {/* Results Grid or Empty State */}
+        {filteredBusinesses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredBusinesses.map((biz) => (
-              <Card
+              <DiscoveryBusinessCard
                 key={biz.id}
-                padding="md"
-                className="border-[#E2E8F0] hover:border-[#CBD5E1] transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3">
-                      <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-[#2563EB] flex-shrink-0">
-                        <RiBuilding4Line className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-[#0F172A]">
-                          {biz.businessName}
-                        </h4>
-                        <div className="flex items-center gap-2 text-xs text-[#64748B] mt-0.5">
-                          <span>{biz.industry}</span>
-                          <span>·</span>
-                          <span className="flex items-center gap-0.5">
-                            <RiMapPin2Line className="h-3 w-3" />
-                            {biz.location}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-end">
-                      <span
-                        className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
-                          biz.aiOpportunity === "High"
-                            ? "bg-[#ECFDF5] text-[#047857] border-[#A7F3D0]"
-                            : "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]"
-                        }`}
-                      >
-                        {biz.aiOpportunity} Opportunity
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Channel Badges */}
-                  <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-                    {biz.socialHandles.website && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#F8FAFC] border border-[#E2E8F0] text-[11px] text-[#475569]">
-                        <RiGlobalLine className="h-3 w-3 text-[#2563EB]" />
-                        Website
-                      </span>
-                    )}
-                    {biz.socialHandles.instagram && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#FDF2F8] border border-[#FBCFE8] text-[11px] text-[#9D174D]">
-                        <RiInstagramLine className="h-3 w-3 text-[#E1306C]" />
-                        Instagram
-                      </span>
-                    )}
-                    {biz.socialHandles.whatsapp && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#ECFDF5] border border-[#A7F3D0] text-[11px] text-[#047857]">
-                        <RiWhatsappLine className="h-3 w-3 text-[#10B981]" />
-                        WhatsApp
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Potential Services */}
-                  <div className="mt-3 bg-[#F8FAFC] border border-[#F1F5F9] rounded-lg p-2.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748B] block mb-1">
-                      AI Acquisition Potential:
-                    </span>
-                    <ul className="text-xs text-[#475569] space-y-1">
-                      {biz.potentialServices.map((svc, sIdx) => (
-                        <li key={sIdx} className="flex items-center gap-1.5">
-                          <RiCheckLine className="h-3.5 w-3.5 text-[#10B981] flex-shrink-0" />
-                          <span>{svc}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-[#F1F5F9] flex items-center justify-between">
-                  <AIBadge confidence={biz.relevanceScore} size="sm" label="Match Score" />
-                  <AIActionButton
-                    size="sm"
-                    variant="solid"
-                    label="Analyze"
-                    onClick={() => {
-                      setAnalyzingBusiness(biz);
-                      setIsSaved(false);
-                    }}
-                  />
-                </div>
-              </Card>
+                business={biz}
+                onResearch={(b) => setResearchingBusiness(b)}
+                onAddToProspects={(b) => handleAddToProspects(b)}
+              />
             ))}
           </div>
-        </div>
+        ) : (
+          <EmptyStateCard
+            icon={<RiCompass3Line className="h-10 w-10 text-[#94A3B8]" />}
+            title="No matching businesses discovered"
+            description="No businesses in the discovery dataset match your search query or channel filters. Try clearing some filters or searching a different industry."
+            actionLabel="Reset Discovery Filters"
+            onAction={handleClearFilters}
+          />
+        )}
       </div>
 
-      {/* AI Business Opportunity Analysis Modal */}
-      {analyzingBusiness && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs"
-            onClick={() => setAnalyzingBusiness(null)}
-          />
-          <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl border border-[#E2E8F0] z-10 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-start justify-between border-b border-[#F1F5F9] pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-[#F5F3FF] text-[#8B5CF6]">
-                  <RiSparkling2Fill className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-[#0F172A]">
-                    AI Acquisition Audit: {analyzingBusiness.businessName}
-                  </h3>
-                  <p className="text-xs text-[#64748B]">
-                    {analyzingBusiness.industry} · {analyzingBusiness.location}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setAnalyzingBusiness(null)}
-                className="p-1 rounded text-[#94A3B8] hover:text-[#0F172A]"
-              >
-                <RiCloseLine className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4 py-4">
-              <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] space-y-2">
-                <span className="text-xs font-bold text-[#0F172A] block">
-                  Identified Acquisition Bottlenecks
-                </span>
-                <ul className="text-xs text-[#475569] space-y-1 list-disc list-inside">
-                  {analyzingBusiness.identifiedPainPoints.map((pt, pIdx) => (
-                    <li key={pIdx}>{pt}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="p-3 bg-[#F5F3FF]/70 rounded-xl border border-[#DDD6FE] space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#7C3AED]">
-                    Recommended Pitch Angle
-                  </span>
-                  <AIBadge confidence={analyzingBusiness.relevanceScore} size="sm" />
-                </div>
-                <p className="text-xs text-[#4C1D95] font-medium leading-relaxed">
-                  {analyzingBusiness.suggestedAngle}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between text-xs px-2 text-[#64748B]">
-                <span>Projected Monthly Opportunity:</span>
-                <strong className="text-sm font-bold text-[#10B981]">
-                  ₹8,999 – ₹15,000 / mo
-                </strong>
-              </div>
-            </div>
-
-            <div className="border-t border-[#F1F5F9] pt-3 flex items-center justify-end gap-2">
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => setAnalyzingBusiness(null)}
-              >
-                Close
-              </Button>
-              <Button
-                size="sm"
-                variant="primary"
-                rightIcon={<RiArrowRightLine className="h-3.5 w-3.5" />}
-                onClick={() => {
-                  setIsSaved(true);
-                  setTimeout(() => setAnalyzingBusiness(null), 800);
-                }}
-              >
-                {isSaved ? "Saved to Prospects!" : "Convert to Active Prospect"}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Slide-Out Research Drawer */}
+      <ResearchDrawer
+        business={researchingBusiness}
+        isOpen={!!researchingBusiness}
+        onClose={() => setResearchingBusiness(null)}
+      />
     </AppLayout>
   );
 }

@@ -22,6 +22,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+import { ProspectsProvider } from "@/lib/store/prospects-store";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#F8FAFC] text-[#172033] selection:bg-[#2563EB]/10 selection:text-[#2563EB]">
-        {children}
+        <ProspectsProvider>{children}</ProspectsProvider>
       </body>
     </html>
   );

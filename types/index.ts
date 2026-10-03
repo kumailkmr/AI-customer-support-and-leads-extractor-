@@ -1,3 +1,5 @@
+export * from "./prospects";
+
 export type StatusType =
   | "New"
   | "Contacted"

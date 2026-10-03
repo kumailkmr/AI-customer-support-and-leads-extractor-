@@ -1,0 +1,1335 @@
+import { BusinessProspect } from "@/types/prospects";
+
+export const initialDiscoveryBusinesses: BusinessProspect[] = [
+  {
+    id: "prosp_alpine",
+    businessName: "Alpine Grand Hotel & Spa",
+    category: "Boutique Luxury Hotel & Suites",
+    industry: "Hospitality",
+    location: "Srinagar, Kashmir",
+    city: "Srinagar",
+    country: "India",
+    website: "https://alpinegrandhotel.example.com",
+    hasWebsite: true,
+    phone: "+91 194 245 8890",
+    email: "reservations@alpinegrandhotel.example.com",
+    address: "Boulevard Road, Dal Lake Front, Srinagar 190001",
+    companySize: "45-60 Employees",
+    socialPresence: {
+      instagram: { handle: "@alpinegrand_resort", followers: "24.5k", active: true },
+      facebook: { page: "AlpineGrandHotelSrinagar", likes: "12.8k", active: true },
+      whatsapp: { number: "+91 98112 34567", businessVerified: true },
+      googleBusiness: { rating: 4.6, reviewCount: 418, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 94,
+    nexusFitRationale:
+      "High visitor volume with severe response latency during night hours; 40% estimated inquiry abandonment on Instagram DMs.",
+    status: "Demo Ready",
+    isProspect: true,
+    discoveredAt: "2026-09-28T09:00:00Z",
+    lastResearchedAt: "2026-10-02T16:30:00Z",
+    lastActivity: "2 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Website booking requires 6-step form with delayed email confirmation (avg 3.5 hrs). No instant room lock.",
+      faqAccess:
+        "Static PDF brochure and 14-question FAQ page. No conversational search for seasonal rates or shikara tour packages.",
+      leadCapture:
+        "No exit-intent lead capture or automated WhatsApp concierge on desktop or mobile website.",
+      followUp:
+        "No automated follow-up for abandoned booking dates or inquiries received past 8:00 PM IST.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "24/7 AI Concierge",
+        description: "Instant room inquiry responses & amenity recommendations in multi-languages.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Instagram & WhatsApp Lead Capture",
+        description: "Capture booking intents directly from DMs and story mentions into CRM pipeline.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Automated Re-engagement Sequences",
+        description: "Smart 24-hr follow-up on unfinished reservations with seasonal discounts.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "High-Value Suite Qualification",
+        description: "Scores corporate retreats and honeymoon packages for expedited sales triage.",
+        impactPotential: "Medium",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Guest Omnichannel Inbox",
+        description: "Consolidate WhatsApp, Instagram DMs, and website chat for front-desk staff.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Losing approximately 35-45% of international booking inquiries due to timezone response delays",
+      "Manual front-desk coordination for seasonal shikara and airport transfer packages",
+      "High reliance on third-party OTAs with 18% commission fees instead of direct bookings",
+    ],
+    suggestedAngle:
+      "Deploy a 24/7 AI Hospitality Concierge that secures direct room reservations across Instagram and WhatsApp with zero commission overhead.",
+    notes: [
+      {
+        id: "note_1",
+        author: "Acquisition Agent",
+        authorRole: "Growth Specialist",
+        content:
+          "Reviewed Google Reviews: Multiple guests mentioned slow response times to Instagram DMs for winter package bookings.",
+        timestamp: "Yesterday at 4:15 PM",
+      },
+      {
+        id: "note_2",
+        author: "System AI",
+        authorRole: "NEXUS Scanner",
+        content:
+          "High potential synergy with WhatsApp Business booking assistant. Current response latency: 5 hrs 40 mins.",
+        timestamp: "2 days ago",
+      },
+    ],
+    activityHistory: [
+      {
+        id: "act_1",
+        type: "status_change",
+        title: "Status advanced to Demo Ready",
+        description: "Interactive demo teaser prepared with customized Alpine Grand branding.",
+        timestamp: "2 hours ago",
+      },
+      {
+        id: "act_2",
+        type: "note_added",
+        title: "Observation note added",
+        description: "Noted peak winter season inbound surge from Delhi & Mumbai travelers.",
+        timestamp: "Yesterday at 4:15 PM",
+      },
+      {
+        id: "act_3",
+        type: "researched",
+        title: "Deep Digital Footprint Researched",
+        description: "Audited website booking flow, Instagram DM responsiveness, and Google reviews.",
+        timestamp: "3 days ago",
+      },
+      {
+        id: "act_4",
+        type: "discovered",
+        title: "Prospect Discovered",
+        description: "Identified via Hospitality sector market scan in Srinagar, Kashmir.",
+        timestamp: "5 days ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_primecare",
+    businessName: "PrimeCare Multi-Speciality Clinic",
+    category: "Polyclinic & Diagnostic Center",
+    industry: "Healthcare",
+    location: "South Delhi, Delhi",
+    city: "Delhi",
+    country: "India",
+    website: "https://primecareclinic.example.com",
+    hasWebsite: true,
+    phone: "+91 11 4100 9200",
+    email: "appointments@primecareclinic.example.com",
+    address: "Ring Road, Lajpat Nagar IV, New Delhi 110024",
+    companySize: "30-50 Staff",
+    socialPresence: {
+      instagram: { handle: "@primecare_delhi", followers: "8.2k", active: false },
+      facebook: { page: "PrimeCareClinicDelhi", likes: "15.4k", active: true },
+      whatsapp: { number: "+91 98765 43210", businessVerified: true },
+      googleBusiness: { rating: 4.4, reviewCount: 612, claimed: true },
+    },
+    opportunityLevel: "Medium",
+    nexusFitScore: 88,
+    nexusFitRationale:
+      "Overburdened telephone reception desk; high drop-off for routine preventive checkup appointments and lab report inquiries.",
+    status: "Contacted",
+    isProspect: true,
+    discoveredAt: "2026-09-29T11:00:00Z",
+    lastResearchedAt: "2026-10-02T11:00:00Z",
+    lastActivity: "5 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Patients must call phone numbers during business hours (9 AM - 7 PM). No real-time self-service booking.",
+      faqAccess:
+        "Doctors' schedules and test preparation instructions are buried across multiple static sub-pages.",
+      leadCapture:
+        "Website contact form lacks immediate confirmation or calendar scheduling capability.",
+      followUp:
+        "Manual SMS dispatched for reminders; no automated follow-up for missed appointments or recurring checkups.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Patient Triage & Intake",
+        description: "Guides patients to the right specialist based on symptoms and department availability.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "WhatsApp Appointment Scheduler",
+        description: "Enables instant doctor appointment booking and diagnostic slot reservation via WhatsApp.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Preventive Care Recalls",
+        description: "Automated recurring health package check-ins and lab test reminder messages.",
+        impactPotential: "Medium",
+      },
+      aiQualification: {
+        enabled: false,
+        label: "Clinical Triage Assist",
+        description: "Flags acute consultation requests for urgent front-desk call routing.",
+        impactPotential: "Low",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Clinic Helpdesk",
+        description: "Centralizes patient queries from WhatsApp, Website Chat, and Facebook into one screen.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Front-desk staff spends 65% of daily call time repeating basic doctor timings and pricing",
+      "Estimated 20% no-show rate for non-confirmed consultations",
+      "Patients struggle to receive diagnostic test reports seamlessly over WhatsApp",
+    ],
+    suggestedAngle:
+      "Implement an AI Clinic Coordinator on WhatsApp that handles appointment scheduling, doctor discovery, and report dispatch 24/7.",
+    notes: [
+      {
+        id: "note_pc_1",
+        author: "Acquisition Agent",
+        authorRole: "Healthcare Sector Lead",
+        content:
+          "Reached out to Practice Director via LinkedIn with a 90-second teaser video of WhatsApp slot booking.",
+        timestamp: "Yesterday, 11:30 AM",
+      },
+    ],
+    activityHistory: [
+      {
+        id: "act_pc_1",
+        type: "contacted",
+        title: "Initial Outreach Sent",
+        description: "Customized diagnostic booking workflow pitch shared with practice director.",
+        timestamp: "5 hours ago",
+      },
+      {
+        id: "act_pc_2",
+        type: "researched",
+        title: "Operational Workflow Researched",
+        description: "Analyzed phone reception bottlenecks and WhatsApp usage.",
+        timestamp: "3 days ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_zenith",
+    businessName: "Zenith Luxury Real Estate",
+    category: "High-End Residential & Penthouse Brokerage",
+    industry: "Real Estate",
+    location: "Bandra West, Mumbai",
+    city: "Mumbai",
+    country: "India",
+    website: "https://zenithproperties.example.com",
+    hasWebsite: true,
+    phone: "+91 22 6780 1200",
+    email: "vip@zenithproperties.example.com",
+    address: "Level 14, Zenith Pinnacle, Pali Hill, Bandra West, Mumbai 400050",
+    companySize: "20-35 Agents",
+    socialPresence: {
+      instagram: { handle: "@zenith_luxury_mumbai", followers: "58.1k", active: true },
+      facebook: { page: "ZenithRealEstateMumbai", likes: "32.0k", active: true },
+      whatsapp: { number: "+91 99887 76655", businessVerified: true },
+      googleBusiness: { rating: 4.8, reviewCount: 189, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 96,
+    nexusFitRationale:
+      "Runs heavy Meta ads for ₹5Cr+ properties; lead contact latency exceeds 18 hours, resulting in severe buyer disengagement.",
+    status: "Researching",
+    isProspect: true,
+    discoveredAt: "2026-09-30T08:00:00Z",
+    lastResearchedAt: "2026-10-02T18:00:00Z",
+    lastActivity: "Yesterday",
+    researchObservations: {
+      contactFlow:
+        "Meta ad forms dump into standard spreadsheet. Agents manually call buyers next day, often missing high-intent impulse windows.",
+      faqAccess:
+        "Floor plans, pricing sheets, and project walkthroughs require waiting for an agent callback.",
+      leadCapture:
+        "Website contains luxury aesthetic but lacks instant buyer qualification or WhatsApp VIP brochure unlock.",
+      followUp:
+        "Sporadic follow-ups by individual agents with no central tracking or automated cadence.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Luxury Property Concierge",
+        description: "Answers square footage, amenities, RERA details, and possession dates instantly.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Instant Ad Qualification Bot",
+        description: "Engages Meta ad leads within 45 seconds on WhatsApp with interactive floor plans.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "High-Touch Nurture Cadence",
+        description: "Personalized WhatsApp video updates for interested buyers who attended site visits.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "HNW Investor Budget Verification",
+        description: "Pre-qualifies buyer budget (₹5Cr - ₹25Cr) and timeline before scheduling partner site visits.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Multi-Agent Omnichannel Dashboard",
+        description: "Seamless handover from AI qualification to assigned senior brokers.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Meta ad cost-per-lead is high (₹1,800/lead) with 60% going cold before first phone conversation",
+      "Brokers waste 4-5 hours daily cold-calling unqualified low-budget inquiries",
+      "No automated weekend or evening lead capture during peak browsing hours",
+    ],
+    suggestedAngle:
+      "Connect NEXUS to Meta Ads to qualify high-net-worth property inquiries on WhatsApp within 60 seconds and auto-book VIP site visits.",
+    notes: [
+      {
+        id: "note_z_1",
+        author: "Acquisition Agent",
+        authorRole: "Real Estate Specialist",
+        content:
+          "Audited their active Meta Ad library: 14 active campaigns running for Pali Hill and Worli sea-facing towers. Great acquisition target.",
+        timestamp: "Yesterday, 3:45 PM",
+      },
+    ],
+    activityHistory: [
+      {
+        id: "act_z_1",
+        type: "researched",
+        title: "Meta Ads & Lead Flow Audited",
+        description: "Discovered 14 active ad creatives with slow lead follow-up.",
+        timestamp: "Yesterday",
+      },
+      {
+        id: "act_z_2",
+        type: "discovered",
+        title: "Discovered in Mumbai Luxury Scan",
+        description: "Added to target research queue.",
+        timestamp: "3 days ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_catalyst",
+    businessName: "Catalyst Medical & Aesthetics",
+    category: "Cosmetic Dermatology & Wellness Clinic",
+    industry: "Healthcare & Aesthetics",
+    location: "South Beach, Miami, FL",
+    city: "Miami",
+    country: "United States",
+    website: "https://catalystmed.example.com",
+    hasWebsite: true,
+    phone: "+1 (305) 555-0199",
+    email: "hello@catalystmed.example.com",
+    address: "1120 Ocean Drive, Suite 400, Miami Beach, FL 33139",
+    companySize: "15-25 Staff",
+    socialPresence: {
+      instagram: { handle: "@catalystmed_aesthetics", followers: "42.0k", active: true },
+      facebook: { page: "CatalystMedMiami", likes: "8.5k", active: true },
+      whatsapp: { number: "+1 (555) 431-8900", businessVerified: true },
+      googleBusiness: { rating: 4.9, reviewCount: 320, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 92,
+    nexusFitRationale:
+      "Receives over 80 Instagram DMs per day inquiring about injectable pricing and treatment packages with high drop-off.",
+    status: "Qualified",
+    isProspect: true,
+    discoveredAt: "2026-09-27T14:00:00Z",
+    lastResearchedAt: "2026-10-01T15:00:00Z",
+    lastActivity: "1 day ago",
+    researchObservations: {
+      contactFlow:
+        "Instagram bio links to Linktree with 7 conflicting links. High friction path to booking consultation.",
+      faqAccess:
+        "Patients repeatedly ask about downtime, discomfort, and pricing on comments without automated response.",
+      leadCapture:
+        "No visual consultation quiz or skin assessment lead magnet on mobile website.",
+      followUp:
+        "No structured follow-up for clients who inquire about high-ticket body contouring ($3k+) but don't book.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Aesthetic Consultation Assistant",
+        description: "Answers pre-treatment questions, recovery timelines, and provides visual portfolio links.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Instagram DM Visual Booking Bot",
+        description: "Converts reel comments and DMs into consultation appointments on the spot.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Automated Cosmetic Treatment Recalls",
+        description: "Triggers 3-month and 6-month neurotoxin and filler touch-up reminder sequences.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Treatment Intent & Budget Scoring",
+        description: "Identifies high-value full-face rejuvenation and surgical referral candidates.",
+        impactPotential: "Medium",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Aesthetics CRM Inbox",
+        description: "Connects Instagram DMs, SMS, and website chat for client coordinators.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Coordinator takes 8-12 hours to respond to Instagram story mentions and DM inquiries",
+      "Clients drop off after hearing basic unit pricing without understanding package value",
+      "Losing rebooking revenue due to manual touch-up tracking",
+    ],
+    suggestedAngle:
+      "Implement an AI Aesthetic Concierge in Instagram DMs that qualifies treatment candidates, shares before-and-after galleries, and books consultations.",
+    notes: [
+      {
+        id: "note_cat_1",
+        author: "Acquisition Agent",
+        authorRole: "Aesthetics Specialist",
+        content:
+          "Very strong visual brand on Instagram. Founder Dr. Martinez actively posts stories but DMs are clearly handled by part-time staff.",
+        timestamp: "Oct 1, 2:00 PM",
+      },
+    ],
+    activityHistory: [
+      {
+        id: "act_cat_1",
+        type: "status_change",
+        title: "Qualified as High-Fit Target",
+        description: "High DM volume verified; match for automated Instagram booking solution.",
+        timestamp: "1 day ago",
+      },
+      {
+        id: "act_cat_2",
+        type: "discovered",
+        title: "Discovered via Instagram Aesthetics Scan",
+        description: "Found in Miami Metro search.",
+        timestamp: "6 days ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_kashmir_valley",
+    businessName: "Kashmir Valley Tours & Treks",
+    category: "Experiential Tourism & Luxury Expeditions",
+    industry: "Travel & Tourism",
+    location: "Srinagar, Kashmir",
+    city: "Srinagar",
+    country: "India",
+    website: "https://kashmirvalleytours.example.com",
+    hasWebsite: true,
+    phone: "+91 194 250 1122",
+    email: "plan@kashmirvalleytours.example.com",
+    address: "Residency Road, Regal Chowk, Srinagar 190001",
+    companySize: "12-20 Staff",
+    socialPresence: {
+      instagram: { handle: "@kashmirvalleytours", followers: "36.4k", active: true },
+      facebook: { page: "KashmirValleyTreks", likes: "19.0k", active: true },
+      whatsapp: { number: "+91 97970 88990", businessVerified: true },
+      googleBusiness: { rating: 4.7, reviewCount: 290, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 91,
+    nexusFitRationale:
+      "Massive seasonal inquiry volume from domestic tourists; manual WhatsApp quoting takes up to 24 hours per itinerary.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-01T10:00:00Z",
+    lastResearchedAt: "2026-10-02T14:00:00Z",
+    lastActivity: "3 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Every customized itinerary inquiry requires 15+ messages back and forth on WhatsApp to gather travel dates, group size, and hotel tier.",
+      faqAccess:
+        "Basic website with outdated 2024 PDF itineraries and no dynamic pricing calculator.",
+      leadCapture:
+        "Heavy engagement on scenic mountain reels, but zero automated lead capture from viral comments.",
+      followUp:
+        "Inquiries that stall after receiving quote are rarely followed up systematically.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Travel Assistant",
+        description: "Answers weather, permits, packing lists, and best season queries instantaneously.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Dynamic Itinerary Builder on WhatsApp",
+        description: "Builds personalized 5-day / 7-day tour packages with estimated budgets in under 2 minutes.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Seasonal Trip Re-engagement",
+        description: "Automated follow-up for cherry blossom, autumn chinar, and snow skiing seasons.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Budget & Group Size Scoring",
+        description: "Prioritizes luxury private groups and corporate offsites for founder attention.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Omnichannel Tour Desk",
+        description: "Consolidates WhatsApp inquiries, Instagram comments, and email quote requests.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Guides and owners spend entire evenings copy-pasting itinerary PDFs on WhatsApp",
+      "High ghosting rate once rough quotes are sent without interactive follow-up",
+      "Losing luxury travelers to organized high-tech aggregator platforms",
+    ],
+    suggestedAngle:
+      "Automate custom tour itinerary building and WhatsApp pricing calculation so travelers can customize and confirm trips in 3 minutes.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_kv_1",
+        type: "discovered",
+        title: "Discovered via Tourism Query",
+        description: "Matched search for 'Travel agencies in Kashmir'.",
+        timestamp: "3 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_saffron_dine",
+    businessName: "Saffron Dine & Lounge",
+    category: "Fine Dining & Event Banqueting",
+    industry: "Restaurants & Dining",
+    location: "Connaught Place, New Delhi",
+    city: "Delhi",
+    country: "India",
+    website: "https://saffrondine.example.com",
+    hasWebsite: true,
+    phone: "+91 11 4350 7700",
+    email: "events@saffrondine.example.com",
+    address: "Inner Circle, Block C, Connaught Place, New Delhi 110001",
+    companySize: "35-50 Staff",
+    socialPresence: {
+      instagram: { handle: "@saffrondine_cp", followers: "29.8k", active: true },
+      facebook: { page: "SaffronDineDelhi", likes: "14.2k", active: true },
+      whatsapp: { number: "+91 98100 22334", businessVerified: true },
+      googleBusiness: { rating: 4.5, reviewCount: 840, claimed: true },
+    },
+    opportunityLevel: "Medium",
+    nexusFitScore: 84,
+    nexusFitRationale:
+      "Weekend table reservations and private banquet inquiries suffer from phone line congestion and missed weekend calls.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-02T08:30:00Z",
+    lastResearchedAt: "2026-10-02T12:00:00Z",
+    lastActivity: "4 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Table booking links redirect to a 3rd party aggregator charging per-cover fee, or prompt phone call.",
+      faqAccess:
+        "Menu is hosted on low-resolution image file; dietary, vegan, and halal options cannot be searched easily.",
+      leadCapture:
+        "No direct private hall banquet or corporate party booking flow on website.",
+      followUp:
+        "No automated review collection or guest anniversary/birthday loyalty re-booking prompts.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "24/7 AI Table Hostess",
+        description: "Handles table reservations, dietary questions, and valet parking inquiries.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Direct WhatsApp Table Lock",
+        description: "Zero-fee direct reservations on WhatsApp with automated deposit collection.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Loyalty & Celebration Recalls",
+        description: "Automated celebratory anniversary and birthday dining invitation triggers.",
+        impactPotential: "Medium",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Banquets & Event Intake",
+        description: "Captures corporate dinners and wedding reception budgets for event manager.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Reservations Inbox",
+        description: "Connects WhatsApp, Google Business messages, and Instagram reservations.",
+        impactPotential: "Medium",
+      },
+    },
+    identifiedPainPoints: [
+      "Pays substantial monthly commission fees to aggregator dining apps for reservations",
+      "Hostess misses 20-30 peak evening calls on Friday/Saturday nights",
+      "Private dining hall sits underbooked on weekdays due to lack of outbound corporate follow-up",
+    ],
+    suggestedAngle:
+      "Cut table booking fees by deploying an AI Table & Banquet Concierge on WhatsApp and Instagram that manages bookings directly.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_sd_1",
+        type: "discovered",
+        title: "Discovered via Dining Search",
+        description: "Matched search for 'Restaurants in Delhi'.",
+        timestamp: "4 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_apex_dental",
+    businessName: "Apex Dental Studio & Aesthetics",
+    category: "Cosmetic Dentistry & Implantology",
+    industry: "Healthcare",
+    location: "Khar West, Mumbai",
+    city: "Mumbai",
+    country: "India",
+    website: "https://apexdentalstudio.example.com",
+    hasWebsite: true,
+    phone: "+91 22 2600 4455",
+    email: "care@apexdentalstudio.example.com",
+    address: "Linking Road, Near Khar Station, Mumbai 400052",
+    companySize: "10-18 Staff",
+    socialPresence: {
+      instagram: { handle: "@apexdental_mumbai", followers: "18.3k", active: true },
+      facebook: { page: "ApexDentalStudioMumbai", likes: "6.2k", active: true },
+      whatsapp: { number: "+91 98200 66778", businessVerified: true },
+      googleBusiness: { rating: 4.8, reviewCount: 245, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 89,
+    nexusFitRationale:
+      "High-ticket smile design and invisalign inquiries require extensive reassurance; clinic currently loses leads to price transparency issues.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-02T09:15:00Z",
+    lastResearchedAt: "2026-10-02T13:45:00Z",
+    lastActivity: "6 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Website lists generic contact form; patient inquiries about aligner packages remain unaddressed for up to 36 hours.",
+      faqAccess:
+        "No pricing guidance or virtual smile assessment tool available.",
+      leadCapture:
+        "Instagram reels showcase celebrity smiles but have no automated DM keyword trigger.",
+      followUp:
+        "No follow-up on consultation quotes or incomplete treatment plan proposals.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Smile Assessment Assistant",
+        description: "Pre-screens patients, explains aligner vs veneer differences, and sets expectations.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Instagram Reel 'Smile' Trigger",
+        description: "Auto-DMs free visual consultation booking link when users comment on case reels.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Treatment Plan Follow-up System",
+        description: "Re-engages patients who received quotes but delayed their procedure start.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Full-Mouth Rehabilitation Scoring",
+        description: "Identifies high-value implant and full arch cases for senior doctor consultation.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Patient Care Desk",
+        description: "Syncs WhatsApp, Instagram, and SMS into one clinic inbox.",
+        impactPotential: "Medium",
+      },
+    },
+    identifiedPainPoints: [
+      "Invisalign and veneer leads drop off when not given fast, reassuring answers on cost and duration",
+      "Clinic front office is busy with physical patients and misses online inquiries",
+      "Zero automated retention or 6-month hygiene check-up reminders",
+    ],
+    suggestedAngle:
+      "Deploy an AI Cosmetic Dental Assistant that instantly answers smile makeover questions and books high-ticket consultations on WhatsApp.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_ad_1",
+        type: "discovered",
+        title: "Discovered via Healthcare Scan",
+        description: "Identified in Mumbai cosmetic dentistry query.",
+        timestamp: "6 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_skyline_realty",
+    businessName: "Skyline Commercial Realty",
+    category: "Commercial Towers & Office Leasing",
+    industry: "Real Estate",
+    location: "Business Bay, Dubai",
+    city: "Dubai",
+    country: "United Arab Emirates",
+    website: "https://skylinedubai.example.com",
+    hasWebsite: true,
+    phone: "+971 4 330 9988",
+    email: "commercial@skylinedubai.example.com",
+    address: "Floor 32, Vision Tower, Business Bay, Dubai, UAE",
+    companySize: "50-80 Staff",
+    socialPresence: {
+      instagram: { handle: "@skylinedubairealty", followers: "64.2k", active: true },
+      facebook: { page: "SkylineCommercialDubai", likes: "40.1k", active: true },
+      whatsapp: { number: "+971 50 123 4567", businessVerified: true },
+      googleBusiness: { rating: 4.7, reviewCount: 410, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 95,
+    nexusFitRationale:
+      "Global corporate investors inquiring about Grade-A office floors across timezones encounter 12-hour delays.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-01T15:00:00Z",
+    lastResearchedAt: "2026-10-02T10:00:00Z",
+    lastActivity: "1 day ago",
+    researchObservations: {
+      contactFlow:
+        "Requires filling out generic 8-field web inquiry; brokers respond during Dubai business hours only.",
+      faqAccess:
+        "Floor plates, lease yields, and service charge documents are gated behind slow email requests.",
+      leadCapture:
+        "High ad spend across LinkedIn and Meta with no instant WhatsApp brochure dispatch.",
+      followUp:
+        "Corporate tenants looking for 10,000+ sq ft are not tracked through structured automated follow-ups.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "24/7 Global Investment Concierge",
+        description: "Provides commercial yields, square footage, and zoning info across European and Asian hours.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Instant Pitch Deck Dispatch",
+        description: "Delivers confidential commercial teasers on WhatsApp upon investor verification.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Institutional Investor Cadence",
+        description: "Nurtures fund managers and family offices with quarterly commercial market reports.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Corporate Budget & Timeline Scoring",
+        description: "Distinguishes Fortune 500 leasing inquiries from low-intent retail inquiries.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Enterprise Multi-Broker Inbox",
+        description: "Routes pre-qualified leads directly to the appropriate commercial asset manager.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Losing international leasing clients due to GST/PST timezone mismatch",
+      "Expensive LinkedIn Sponsored Content leads take too long to reach senior broker desks",
+      "Manual drafting of property specification sheets delays deal momentum",
+    ],
+    suggestedAngle:
+      "Equip commercial leasing team with an enterprise AI assistant that pre-qualifies international funds and shares investment decks 24/7.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_sr_1",
+        type: "discovered",
+        title: "Discovered via Dubai Commercial Search",
+        description: "Matched search for 'Real estate companies in Dubai'.",
+        timestamp: "1 day ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_beacon_academy",
+    businessName: "Beacon Prep & Higher Academy",
+    category: "STEM & Competitive Entrance Institute",
+    industry: "Education & Coaching",
+    location: "Sector 62, Noida, UP",
+    city: "Noida",
+    country: "India",
+    website: "https://beaconacademy.example.com",
+    hasWebsite: true,
+    phone: "+91 120 456 7890",
+    email: "admissions@beaconacademy.example.com",
+    address: "Institutional Area, Sector 62, Noida, Uttar Pradesh 201309",
+    companySize: "40-70 Staff",
+    socialPresence: {
+      instagram: { handle: "@beacon_prep_academy", followers: "15.7k", active: true },
+      facebook: { page: "BeaconAcademyNoida", likes: "28.5k", active: true },
+      whatsapp: { number: "+91 99100 88776", businessVerified: true },
+      googleBusiness: { rating: 4.3, reviewCount: 520, claimed: true },
+    },
+    opportunityLevel: "Medium",
+    nexusFitScore: 82,
+    nexusFitRationale:
+      "Parents inquiring about admission fees, batch timings, and faculty profiles flood counselors; high drop-off during peak admission cycles.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-02T06:00:00Z",
+    lastResearchedAt: "2026-10-02T11:30:00Z",
+    lastActivity: "7 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Admissions page has outdated syllabus PDF and an open web form that leads to delayed counselor calls.",
+      faqAccess:
+        "Parents struggle to find scholarship criteria and previous year track records without calling.",
+      leadCapture:
+        "No sample entrance mock test or diagnostic score quiz to capture parent contact info.",
+      followUp:
+        "Parents who attend open-house seminars do not receive automated personalized reminders before fee deadlines.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Admissions Counselor",
+        description: "Answers syllabus, fee schedules, batch timings, and scholarship cutoff queries 24/7.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Diagnostic Quiz Lead Magnet",
+        description: "Captures prospective student details through interactive aptitude assessment test.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Parent Admission Nurture",
+        description: "Automated WhatsApp sequences guiding parents from initial inquiry to campus visit.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Entrance Intent & Board Scoring",
+        description: "Categorizes inquiries by target exam (IIT-JEE / NEET / Foundation) for counselors.",
+        impactPotential: "Medium",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Counselor Omnichannel Portal",
+        description: "Connects phone call logs, WhatsApp chats, and website leads in one interface.",
+        impactPotential: "Medium",
+      },
+    },
+    identifiedPainPoints: [
+      "Admissions desk overwhelmed by repetitive fee and timing inquiries during peak months",
+      "Parents enroll with competitors who respond within minutes on WhatsApp",
+      "Low attendance conversion from web inquiries to physical campus open-house days",
+    ],
+    suggestedAngle:
+      "Implement an AI Admissions Counselor on WhatsApp that answers syllabus and fee queries, conducts diagnostic tests, and books campus tours.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_ba_1",
+        type: "discovered",
+        title: "Discovered via Education Scan",
+        description: "Identified in competitive coaching academy search.",
+        timestamp: "7 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_sterling_legal",
+    businessName: "Sterling Legal & Corporate Advisory",
+    category: "Corporate Governance & M&A Firm",
+    industry: "Professional Services",
+    location: "Nariman Point, Mumbai",
+    city: "Mumbai",
+    country: "India",
+    website: "https://sterlinglegal.example.com",
+    hasWebsite: true,
+    phone: "+91 22 6120 3300",
+    email: "contact@sterlinglegal.example.com",
+    address: "Maker Chambers V, Nariman Point, Mumbai 400021",
+    companySize: "25-40 Lawyers",
+    socialPresence: {
+      instagram: { handle: "@sterling_legal_adv", followers: "3.2k", active: false },
+      facebook: { page: "SterlingLegalMumbai", likes: "4.1k", active: false },
+      whatsapp: { number: "+91 98211 44556", businessVerified: true },
+      googleBusiness: { rating: 4.7, reviewCount: 95, claimed: true },
+    },
+    opportunityLevel: "Low",
+    nexusFitScore: 74,
+    nexusFitRationale:
+      "Bespoke institutional corporate clients; discovery relies heavily on partner referrals rather than digital volume.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-01T12:00:00Z",
+    lastResearchedAt: "2026-10-02T09:00:00Z",
+    lastActivity: "2 days ago",
+    researchObservations: {
+      contactFlow:
+        "Conservative website with corporate bio cards and email addresses. No automated lead capture.",
+      faqAccess:
+        "No public FAQ or service pricing due to regulatory compliance guidelines.",
+      leadCapture:
+        "Whitepaper downloads require standard corporate email registration.",
+      followUp:
+        "Manual partner relationship tracking.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: false,
+        label: "AI Executive Secretary",
+        description: "Assists with initial corporate intake and NDAs.",
+        impactPotential: "Low",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Regulatory Alert Gating",
+        description: "Captures corporate general counsel details via compliance whitepapers.",
+        impactPotential: "Medium",
+      },
+      followUp: {
+        enabled: false,
+        label: "Client Lifecycle Check-ins",
+        description: "Quarterly compliance review reminders.",
+        impactPotential: "Low",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Enterprise Conflict Check Pre-screening",
+        description: "Assists with company registration and domain screening prior to partner consultation.",
+        impactPotential: "Medium",
+      },
+      unifiedInbox: {
+        enabled: false,
+        label: "Executive Legal Inbox",
+        description: "Secure routing for confidential client requests.",
+        impactPotential: "Low",
+      },
+    },
+    identifiedPainPoints: [
+      "Partners spend valuable billable hours filtering out small retail claims that don't match firm threshold",
+      "Slow initial conflict check and intake paperwork turnaround",
+    ],
+    suggestedAngle:
+      "Automate initial corporate pre-screening and NDA exchange to save partner billable hours.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_sl_1",
+        type: "discovered",
+        title: "Discovered via Professional Services Scan",
+        description: "Added for corporate B2B analysis.",
+        timestamp: "2 days ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_royal_spring",
+    businessName: "Royal Spring Resorts & Wellness",
+    category: "Mountain Luxury Resort & Ski Lodge",
+    industry: "Hospitality",
+    location: "Gulmarg, Kashmir",
+    city: "Gulmarg",
+    country: "India",
+    website: "https://royalspringgulmarg.example.com",
+    hasWebsite: true,
+    phone: "+91 195 425 4321",
+    email: "stay@royalspringgulmarg.example.com",
+    address: "Near Gondola Phase 1, Gulmarg, Baramulla 193403",
+    companySize: "50-75 Staff",
+    socialPresence: {
+      instagram: { handle: "@royalspring_gulmarg", followers: "48.9k", active: true },
+      facebook: { page: "RoyalSpringResortGulmarg", likes: "22.4k", active: true },
+      whatsapp: { number: "+91 97971 22334", businessVerified: true },
+      googleBusiness: { rating: 4.8, reviewCount: 512, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 93,
+    nexusFitRationale:
+      "Premium ski resort with high seasonal spikes (Dec-March); overwhelmed reservation desk loses direct high-tariff bookings.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-02T07:00:00Z",
+    lastResearchedAt: "2026-10-02T14:30:00Z",
+    lastActivity: "5 hours ago",
+    researchObservations: {
+      contactFlow:
+        "High winter demand causes phone lines to stay busy. Web booking engine frequently shows rate errors.",
+      faqAccess:
+        "Ski equipment rental, gondola ticket guidance, and heated room policies asked hundreds of times per day.",
+      leadCapture:
+        "No winter early-bird notification waitlist or VIP booking priority capture.",
+      followUp:
+        "Zero follow-up with past winter guests for upcoming snowfall season re-booking.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Ski Concierge & Front Desk",
+        description: "Answers snow conditions, gondola timings, and heated villa tariffs instantly 24/7.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Early Snowfall Waitlist Engine",
+        description: "Captures high-spending ski tourists on Instagram & WhatsApp for priority chalets.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Annual Snow Season Re-engagement",
+        description: "Smart WhatsApp re-booking campaigns sent to past guests in October/November.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "VIP Chalet & Heli-Skiing Qualification",
+        description: "Identifies international luxury skiers for bespoke expedition packages.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Mountain Resort Inbox",
+        description: "Centralizes guest communication across WhatsApp, Instagram, and web chat.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Inbound phone lines get congested during first snowfall announcements",
+      "Losing 5-star guests to boutique cottages due to slow WhatsApp response time",
+      "High OTA commissions during peak ski season when rooms could sell direct",
+    ],
+    suggestedAngle:
+      "Deploy an automated AI Ski Concierge on WhatsApp to secure direct bookings, answer snow conditions, and upsell ski rentals.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_rs_1",
+        type: "discovered",
+        title: "Discovered in Kashmir Hospitality Scan",
+        description: "Matched high-tariff mountain resort criteria.",
+        timestamp: "5 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_artisan_craft",
+    businessName: "Artisan Craft Bakery & Cafe",
+    category: "Specialty Sourdough & Patisserie Chain",
+    industry: "Restaurants & Dining",
+    location: "Indiranagar, Bengaluru",
+    city: "Bengaluru",
+    country: "India",
+    website: "https://artisancraftbakery.example.com",
+    hasWebsite: true,
+    phone: "+91 80 4122 8899",
+    email: "hello@artisancraftbakery.example.com",
+    address: "100ft Road, Indiranagar, Bengaluru, Karnataka 560038",
+    companySize: "20-30 Staff",
+    socialPresence: {
+      instagram: { handle: "@artisancraft_blr", followers: "33.1k", active: true },
+      facebook: { page: "ArtisanCraftBakeryBlr", likes: "11.2k", active: true },
+      whatsapp: { number: "+91 99001 22334", businessVerified: true },
+      googleBusiness: { rating: 4.6, reviewCount: 680, claimed: true },
+    },
+    opportunityLevel: "Medium",
+    nexusFitScore: 81,
+    nexusFitRationale:
+      "Custom birthday cake and corporate catering orders handled chaotically over WhatsApp with lost messages and order errors.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-02T08:00:00Z",
+    lastResearchedAt: "2026-10-02T13:00:00Z",
+    lastActivity: "6 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Customers must send WhatsApp messages with reference images for custom cakes; staff takes 6-8 hours to reply with price.",
+      faqAccess:
+        "Flavors, delivery radius, and allergen notes are lost across Instagram story highlights.",
+      leadCapture:
+        "No automated corporate event catering inquiry form.",
+      followUp:
+        "Customers who ask for cake quotes frequently abandon if response takes longer than 2 hours.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Patisserie Order Assistant",
+        description: "Answers flavor options, allergen queries, and calculates cake pricing instantly.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "WhatsApp Custom Cake Builder",
+        description: "Guides customers through size, flavor, inscription, and date selection on WhatsApp.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Annual Birthday Recall",
+        description: "Reminds customers 2 weeks before family birthdays to re-order specialty cakes.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: false,
+        label: "Corporate Catering Scoring",
+        description: "Routes large office breakfast and bulk gift hamper orders to catering manager.",
+        impactPotential: "Medium",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Unified Bakery Order Inbox",
+        description: "Prevents missed messages between Instagram DMs and WhatsApp bakery line.",
+        impactPotential: "High",
+      },
+    },
+    identifiedPainPoints: [
+      "Staff spends hours answering 'what flavors do you have' instead of baking",
+      "Losing custom celebration cake orders to competitors with instant ordering",
+      "Zero automated repeat customer retention system",
+    ],
+    suggestedAngle:
+      "Automate custom celebration cake inquiries and allergen consultations on WhatsApp with instant pricing quotes.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_ac_1",
+        type: "discovered",
+        title: "Discovered in Bengaluru Cafe Scan",
+        description: "High social presence with manual ordering bottlenecks.",
+        timestamp: "6 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_horizon_expeditions",
+    businessName: "Horizon Himalayan Expeditions",
+    category: "High Altitude Treks & Motorcycle Safaris",
+    industry: "Travel & Tourism",
+    location: "Leh Ladakh",
+    city: "Leh",
+    country: "India",
+    website: "https://horizonladakh.example.com",
+    hasWebsite: true,
+    phone: "+91 198 225 3456",
+    email: "adventures@horizonladakh.example.com",
+    address: "Fort Road, Near Main Bazaar, Leh, Ladakh 194101",
+    companySize: "15-25 Staff",
+    socialPresence: {
+      instagram: { handle: "@horizonladakhtreks", followers: "28.3k", active: true },
+      facebook: { page: "HorizonLadakhExpeditions", likes: "16.7k", active: true },
+      whatsapp: { number: "+91 96229 44556", businessVerified: true },
+      googleBusiness: { rating: 4.8, reviewCount: 215, claimed: true },
+    },
+    opportunityLevel: "High",
+    nexusFitScore: 90,
+    nexusFitRationale:
+      "International trekkers inquiring about permits, fitness criteria, and high-altitude acclimatization require fast expert guidance.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-02T05:30:00Z",
+    lastResearchedAt: "2026-10-02T11:00:00Z",
+    lastActivity: "8 hours ago",
+    researchObservations: {
+      contactFlow:
+        "Expedition leaders are often in remote passes without internet for 4-5 days; office staff struggles with technical gear queries.",
+      faqAccess:
+        "Important acclimatization protocols and gear rental costs are scattered across multiple blog posts.",
+      leadCapture:
+        "High reel views on motorcycle expeditions across Khardung La with zero automated comment-to-DM brochure flow.",
+      followUp:
+        "Summer booking season closes fast; slow inquiries drop out and book with larger commercial aggregators.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Expedition Safety & Gear Advisor",
+        description: "Provides medical acclimatization advice, permit rules, and gear checklists 24/7.",
+        impactPotential: "High",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Instant Route Itinerary on WhatsApp",
+        description: "Shares detailed day-by-day altitude profiles and costs instantly upon inquiry.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Seasonal Pass Opening Alerts",
+        description: "Re-engages waitlisted travelers as soon as Manali-Leh highway permits open.",
+        impactPotential: "High",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "Trekker Experience & Fitness Scoring",
+        description: "Assesses mountaineering background before confirming technical 6000m peaks.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: true,
+        label: "Expedition Operations Desk",
+        description: "Syncs satellite email, WhatsApp groups, and Instagram inquiries into one dashboard.",
+        impactPotential: "Medium",
+      },
+    },
+    identifiedPainPoints: [
+      "Inbound inquiries drop off during 1-week periods when guides are leading treks off-grid",
+      "Trekkers need instant reassurance on altitude sickness safety before paying deposits",
+      "Manual bank transfer verification slows down booking confirmation",
+    ],
+    suggestedAngle:
+      "Deploy an AI Himalayan Expedition Guide on WhatsApp to answer altitude preparation questions and secure high-tariff expedition deposits 24/7.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_he_1",
+        type: "discovered",
+        title: "Discovered via Adventure Travel Scan",
+        description: "Identified high-tariff expedition provider.",
+        timestamp: "8 hours ago",
+      },
+    ],
+  },
+  {
+    id: "prosp_vantage_wealth",
+    businessName: "Vantage Wealth & Family Office",
+    category: "Private Wealth & Multi-Asset Advisory",
+    industry: "Professional Services",
+    location: "BKC, Mumbai",
+    city: "Mumbai",
+    country: "India",
+    website: "https://vantagewealth.example.com",
+    hasWebsite: true,
+    phone: "+91 22 6900 8800",
+    email: "advisory@vantagewealth.example.com",
+    address: "Tower 2, G-Block, Bandra Kurla Complex, Mumbai 400051",
+    companySize: "20-30 Advisors",
+    socialPresence: {
+      instagram: { handle: "@vantagewealth_bkc", followers: "4.5k", active: false },
+      facebook: { page: "VantageWealthManagement", likes: "5.8k", active: false },
+      whatsapp: { number: "+91 99300 11223", businessVerified: true },
+      googleBusiness: { rating: 4.8, reviewCount: 78, claimed: true },
+    },
+    opportunityLevel: "Medium",
+    nexusFitScore: 79,
+    nexusFitRationale:
+      "Wealthy individuals research alternative investment funds (AIFs) online but experience high friction connecting with qualified portfolio managers.",
+    status: "Found",
+    isProspect: false,
+    discoveredAt: "2026-10-01T16:00:00Z",
+    lastResearchedAt: "2026-10-02T10:30:00Z",
+    lastActivity: "1 day ago",
+    researchObservations: {
+      contactFlow:
+        "High-friction contact form asking for net worth without explaining confidentiality protocols.",
+      faqAccess:
+        "Tax restructuring and PMS performance fact sheets require manual email exchanges.",
+      leadCapture:
+        "No interactive tax optimization calculator or retirement planning assessment.",
+      followUp:
+        "Prospective clients waiting for partner callbacks often get cold feet.",
+    },
+    opportunitySignals: {
+      customerSupport: {
+        enabled: true,
+        label: "AI Wealth Management Assistant",
+        description: "Answers regulatory, compliance, and product structure queries confidentially.",
+        impactPotential: "Medium",
+      },
+      leadCapture: {
+        enabled: true,
+        label: "Confidential Portfolio Scorecard",
+        description: "Captures HNW investor criteria through private digital scorecard.",
+        impactPotential: "High",
+      },
+      followUp: {
+        enabled: true,
+        label: "Quarterly Macro Insights Cadence",
+        description: "Automated distribution of exclusive economic briefs to qualified prospects.",
+        impactPotential: "Medium",
+      },
+      aiQualification: {
+        enabled: true,
+        label: "HNW Investible Asset Pre-Qualification",
+        description: "Screens investor ticket size (₹2Cr+ minimum) before partner consultation.",
+        impactPotential: "High",
+      },
+      unifiedInbox: {
+        enabled: false,
+        label: "Private Client Communications Hub",
+        description: "Encrypted, compliance-ready communication stream.",
+        impactPotential: "Low",
+      },
+    },
+    identifiedPainPoints: [
+      "Advisors waste time speaking to retail investors below the firm's regulatory ₹1Cr AIF threshold",
+      "High-net-worth prospects abandon website when forced to submit open telephone numbers",
+      "Manual preparation of bespoke pitch decks slows partner turnaround",
+    ],
+    suggestedAngle:
+      "Implement a confidential AI Pre-Qualification and Market Briefing portal that screens high-net-worth investors before senior advisor meetings.",
+    notes: [],
+    activityHistory: [
+      {
+        id: "act_vw_1",
+        type: "discovered",
+        title: "Discovered via Wealth Scan",
+        description: "Targeting BKC financial district firms.",
+        timestamp: "1 day ago",
+      },
+    ],
+  },
+];
