@@ -1,3 +1,4 @@
+export * from "./pipeline";
 export * from "./prospects";
 
 export type StatusType =

@@ -55,12 +55,12 @@ export function ResearchDrawer({ business, isOpen, onClose }: ResearchDrawerProp
   };
 
   const researchStatuses: ProspectPipelineStatus[] = [
-    "Found",
-    "Researching",
-    "Research Complete",
-    "Needs Review",
-    "Qualified",
-    "Rejected",
+    "FOUND",
+    "RESEARCHING",
+    "QUALIFIED",
+    "DEMO READY",
+    "CONTACTED",
+    "LOST",
   ];
 
   return (
@@ -137,14 +137,16 @@ export function ResearchDrawer({ business, isOpen, onClose }: ResearchDrawerProp
               <div className="flex-shrink-0">
                 <StatusBadge
                   status={
-                    business.status === "Demo Ready"
+                    business.status === "DEMO READY" || business.status === "DEMO"
                       ? "Demo"
-                      : business.status === "Qualified" || business.status === "Research Complete"
+                      : business.status === "QUALIFIED" || business.status === "PROPOSAL" || business.status === "NEGOTIATION"
                       ? "Qualified"
-                      : business.status === "Researching"
+                      : business.status === "RESEARCHING" || business.status === "REPLIED"
                       ? "Interested"
-                      : business.status === "Contacted"
+                      : business.status === "CONTACTED"
                       ? "Contacted"
+                      : business.status === "WON"
+                      ? "Closed"
                       : "New"
                   }
                   size="md"

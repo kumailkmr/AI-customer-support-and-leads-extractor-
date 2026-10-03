@@ -136,14 +136,16 @@ export function DiscoveryBusinessCard({
       <div className="mt-4 pt-3 border-t border-[#F1F5F9] flex items-center justify-between gap-2">
         <StatusBadge
           status={
-            business.status === "Demo Ready"
+            business.status === "DEMO READY" || business.status === "DEMO"
               ? "Demo"
-              : business.status === "Qualified" || business.status === "Research Complete"
+              : business.status === "QUALIFIED" || business.status === "PROPOSAL" || business.status === "NEGOTIATION"
               ? "Qualified"
-              : business.status === "Researching"
+              : business.status === "RESEARCHING" || business.status === "REPLIED"
               ? "Interested"
-              : business.status === "Contacted"
+              : business.status === "CONTACTED"
               ? "Contacted"
+              : business.status === "WON"
+              ? "Closed"
               : "New"
           }
           size="sm"

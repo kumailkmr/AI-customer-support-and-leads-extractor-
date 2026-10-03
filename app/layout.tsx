@@ -23,6 +23,7 @@ export const viewport: Viewport = {
 };
 
 import { ProspectsProvider } from "@/lib/store/prospects-store";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export default function RootLayout({
   children,
@@ -32,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-[#F8FAFC] text-[#172033] selection:bg-[#2563EB]/10 selection:text-[#2563EB]">
-        <ProspectsProvider>{children}</ProspectsProvider>
+        <ToastProvider>
+          <ProspectsProvider>{children}</ProspectsProvider>
+        </ToastProvider>
       </body>
     </html>
   );
