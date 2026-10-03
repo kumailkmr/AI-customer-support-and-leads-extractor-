@@ -1,5 +1,6 @@
 export * from "./pipeline";
 export * from "./prospects";
+export * from "./analysis";
 
 export type StatusType =
   | "New"

@@ -483,10 +483,16 @@ export function ResearchDrawer({ business, isOpen, onClose }: ResearchDrawerProp
                   Add to Prospects
                 </Button>
               ) : (
-                <span className="text-xs font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-3 py-1.5 rounded-lg flex items-center gap-1.5">
-                  <RiCheckLine className="h-4 w-4" />
-                  In Active Prospects
-                </span>
+                <Link href={`/prospects/${business.id}/analysis`} onClick={onClose}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white border-transparent"
+                    leftIcon={<RiSparkling2Fill className="h-3.5 w-3.5" />}
+                  >
+                    Analyze Opportunity
+                  </Button>
+                </Link>
               )}
 
               <Link href={`/prospects/${business.id}`} onClick={onClose}>
@@ -495,7 +501,7 @@ export function ResearchDrawer({ business, isOpen, onClose }: ResearchDrawerProp
                   variant="outline"
                   rightIcon={<RiArrowRightLine className="h-3.5 w-3.5" />}
                 >
-                  Open Full Dossier
+                  Open Dossier
                 </Button>
               </Link>
             </div>

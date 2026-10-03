@@ -17,6 +17,7 @@ import {
   RiCheckLine,
   RiSearchLine,
   RiArrowRightLine,
+  RiSparkling2Fill,
 } from "react-icons/ri";
 
 interface DiscoveryBusinessCardProps {
@@ -173,15 +174,27 @@ export function DiscoveryBusinessCard({
               Add to Prospects
             </Button>
           ) : (
-            <Link href={`/prospects/${business.id}`}>
-              <Button
-                size="sm"
-                variant="outline"
-                rightIcon={<RiArrowRightLine className="h-3.5 w-3.5" />}
-              >
-                In Prospects
-              </Button>
-            </Link>
+            <div className="flex items-center gap-1.5">
+              <Link href={`/prospects/${business.id}/analysis`}>
+                <Button
+                  size="sm"
+                  variant="primary"
+                  className="bg-[#8B5CF6] hover:bg-[#7C3AED] text-white border-transparent"
+                  leftIcon={<RiSparkling2Fill className="h-3.5 w-3.5" />}
+                >
+                  Analyze
+                </Button>
+              </Link>
+              <Link href={`/prospects/${business.id}`}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  rightIcon={<RiArrowRightLine className="h-3.5 w-3.5" />}
+                >
+                  CRM
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
       </div>

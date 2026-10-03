@@ -18,6 +18,7 @@ import {
   RiSparkling2Fill,
   RiTimeLine,
 } from "react-icons/ri";
+import { useAnalysis } from "@/lib/store/analysis-store";
 
 interface ProspectsCardViewProps {
   prospects: BusinessProspect[];
@@ -29,6 +30,7 @@ export function ProspectsCardView({
   prospects,
   onUpdateStatus,
 }: ProspectsCardViewProps) {
+  const { getAnalysis, getAnalysisStatus } = useAnalysis();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {prospects.map((item) => {
@@ -149,6 +151,49 @@ export function ProspectsCardView({
                     {item.lastActivity}
                   </span>
                 )}
+              </div>
+
+              {/* AI Analysis Quick Link */}
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-[#F8FAFC]">
+                <span className="text-[11px] text-[#64748B] flex items-center gap-1 font-medium">
+                  <RiSparkling2Fill className="h-3 w-3 text-[#8B5CF6]" />
+                  AI Analysis:
+                </span>
+                {(() => {
+                  const status = getAnalysisStatus(item.id);
+                  const ana = getAnalysis(item.id);
+                  if (status === "Ready" && ana) {
+                    return (
+                      <Link href={`/prospects/${item.id}/analysis`}>
+                        <span className="text-[10px] font-bold text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-2 py-0.5 rounded-full hover:bg-[#D1FAE5] transition-colors">
+                          Ready (v{ana.version}) →
+                        </span>
+                      </Link>
+                    );
+                  } else if (status === "Needs Review") {
+                    return (
+                      <Link href={`/prospects/${item.id}/analysis`}>
+                        <span className="text-[10px] font-bold text-[#B45309] bg-[#FFFBEB] border border-[#FDE68A] px-2 py-0.5 rounded-full hover:bg-[#FEF3C7] transition-colors">
+                          Needs Review →
+                        </span>
+                      </Link>
+                    );
+                  } else if (status === "Analyzing") {
+                    return (
+                      <span className="text-[10px] font-bold text-[#6D28D9] bg-[#F5F3FF] border border-[#DDD6FE] px-2 py-0.5 rounded-full">
+                        Analyzing...
+                      </span>
+                    );
+                  } else {
+                    return (
+                      <Link href={`/prospects/${item.id}/analysis`}>
+                        <span className="text-[10px] font-semibold text-[#2563EB] hover:underline">
+                          Analyze →
+                        </span>
+                      </Link>
+                    );
+                  }
+                })()}
               </div>
             </div>
 

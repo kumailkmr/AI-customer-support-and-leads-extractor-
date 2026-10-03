@@ -6,6 +6,7 @@ import { BusinessProspect, ProspectPipelineStatus } from "@/types/prospects";
 import { formatCrmCurrency } from "@/lib/crm/crm-service";
 import { getStageConfig, PIPELINE_STAGES } from "@/lib/crm/pipeline-config";
 import { Button } from "@/components/ui/Button";
+import { useAnalysis } from "@/lib/store/analysis-store";
 import {
   RiBuilding4Line,
   RiGlobalLine,
@@ -37,6 +38,7 @@ export function ProspectsTable({
   onBulkAddTag,
   onBulkDelete,
 }: ProspectsTableProps) {
+  const { getAnalysis, getAnalysisStatus } = useAnalysis();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkTagOpen, setIsBulkTagOpen] = useState(false);
   const [bulkTagInput, setBulkTagInput] = useState("High Potential");
@@ -159,6 +161,7 @@ export function ProspectsTable({
                 <th className="py-3 px-4 min-w-[130px]">Pipeline Stage</th>
                 <th className="py-3 px-4 min-w-[120px]">Deal Value</th>
                 <th className="py-3 px-4 min-w-[120px]">Next Follow-Up</th>
+                <th className="py-3 px-4 min-w-[110px]">AI Analysis</th>
                 <th className="py-3 px-4">Source</th>
                 <th className="py-3 px-4">Last Activity</th>
                 <th className="py-3 px-4 text-right">Actions</th>
@@ -327,6 +330,49 @@ export function ProspectsTable({
                           No Follow-Up
                         </span>
                       )}
+                    </td>
+
+                    {/* AI Analysis Column */}
+                    <td className="py-3 px-4">
+                      {(() => {
+                        const status = getAnalysisStatus(item.id);
+                        const ana = getAnalysis(item.id);
+                        if (status === "Ready" && ana) {
+                          return (
+                            <Link href={`/prospects/${item.id}/analysis`}>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] hover:bg-[#D1FAE5] transition-colors cursor-pointer">
+                                <RiSparkling2Fill className="h-2.5 w-2.5 text-[#10B981]" />
+                                Ready (v{ana.version})
+                              </span>
+                            </Link>
+                          );
+                        } else if (status === "Needs Review") {
+                          return (
+                            <Link href={`/prospects/${item.id}/analysis`}>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] hover:bg-[#FEF3C7] transition-colors cursor-pointer">
+                                <RiAlertLine className="h-2.5 w-2.5 text-[#F59E0B]" />
+                                Review
+                              </span>
+                            </Link>
+                          );
+                        } else if (status === "Analyzing") {
+                          return (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F5F3FF] text-[#6D28D9] border border-[#DDD6FE]">
+                              <RiSparkling2Fill className="h-2.5 w-2.5 text-[#8B5CF6] animate-spin" />
+                              Analyzing
+                            </span>
+                          );
+                        } else {
+                          return (
+                            <Link href={`/prospects/${item.id}/analysis`}>
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F8FAFC] text-[#64748B] border border-[#E2E8F0] hover:bg-[#F1F5F9] hover:text-[#2563EB] transition-colors cursor-pointer">
+                                <RiSparkling2Fill className="h-2.5 w-2.5 text-[#94A3B8]" />
+                                Analyze
+                              </span>
+                            </Link>
+                          );
+                        }
+                      })()}
                     </td>
 
                     {/* Acquisition Source */}

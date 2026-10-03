@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { EmptyStateCard } from "@/components/ui/EmptyStateCard";
 import { useProspects } from "@/lib/store/prospects-store";
+import { useAnalysis } from "@/lib/store/analysis-store";
 import { useToast } from "@/components/ui/Toast";
 import { filterAndSortProspects, CrmFilterState } from "@/lib/crm/crm-service";
 import { BusinessProspect, ProspectPipelineStatus } from "@/types/prospects";
@@ -46,6 +47,7 @@ export default function ProspectsPage() {
     exportProspects,
   } = useProspects();
 
+  const { analyses } = useAnalysis();
   const { showToast } = useToast();
 
   // Filter state
@@ -57,6 +59,7 @@ export default function ProspectsPage() {
     source: "All",
     followUp: "All",
     sortBy: "updated_desc",
+    analysisStatus: "All",
   });
 
   // Modals state
@@ -73,6 +76,7 @@ export default function ProspectsPage() {
       source: "All",
       followUp: "All",
       sortBy: "updated_desc",
+      analysisStatus: "All",
     });
     showToast("Filter criteria cleared.", "info");
   };
@@ -84,12 +88,27 @@ export default function ProspectsPage() {
     filters.opportunity !== "All" ||
     filters.source !== "All" ||
     filters.followUp !== "All" ||
+    (filters.analysisStatus !== "All" && !!filters.analysisStatus) ||
     filters.sortBy !== "updated_desc";
+
+  // Build analysis status lookup map
+  const analysisStatuses = useMemo(() => {
+    const map: Record<string, string> = {};
+    prospects.forEach((p) => {
+      const a = analyses[p.id.toLowerCase()];
+      if (!a) {
+        map[p.id.toLowerCase()] = "Not Analyzed";
+      } else {
+        map[p.id.toLowerCase()] = a.status;
+      }
+    });
+    return map;
+  }, [prospects, analyses]);
 
   // Filter & sort prospects using service layer
   const filteredProspects = useMemo(() => {
-    return filterAndSortProspects(prospects, filters);
-  }, [prospects, filters]);
+    return filterAndSortProspects(prospects, filters, analysisStatuses);
+  }, [prospects, filters, analysisStatuses]);
 
   // Handlers with toast feedback
   const handleCreateProspect = (data: Partial<BusinessProspect>) => {

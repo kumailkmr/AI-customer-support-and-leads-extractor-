@@ -51,7 +51,7 @@ export function CrmFilterBar({
       </div>
 
       {/* Multi-Filter Selectors */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-2 border-t border-[#F1F5F9]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 pt-2 border-t border-[#F1F5F9]">
         <Select
           label="Pipeline Stage"
           options={[
@@ -128,6 +128,19 @@ export function CrmFilterBar({
           ]}
           value={filters.followUp}
           onChange={(e) => onChange({ followUp: e.target.value })}
+        />
+
+        <Select
+          label="AI Analysis"
+          options={[
+            { label: "All Analyses", value: "All" },
+            { label: "Ready", value: "Ready" },
+            { label: "Needs Review", value: "Needs Review" },
+            { label: "Analyzing", value: "Analyzing" },
+            { label: "Not Analyzed", value: "Not Analyzed" },
+          ]}
+          value={filters.analysisStatus || "All"}
+          onChange={(e) => onChange({ analysisStatus: e.target.value })}
         />
 
         <Select

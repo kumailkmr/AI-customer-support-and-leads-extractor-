@@ -23,6 +23,14 @@ import { AddActivityModal } from "@/components/crm/AddActivityModal";
 import { AddNoteModal } from "@/components/crm/AddNoteModal";
 import { ScheduleFollowUpModal } from "@/components/crm/ScheduleFollowUpModal";
 
+import { useAnalysis } from "@/lib/store/analysis-store";
+import {
+  getStatusBadgeProps,
+  getConfidenceBadgeProps,
+} from "@/lib/analysis/analysis-service";
+import { AnalyzingStateModal } from "@/components/analysis/AnalyzingStateModal";
+import { PrepareDemoModal } from "@/components/analysis/PrepareDemoModal";
+
 import {
   RiArrowLeftLine,
   RiGlobalLine,
@@ -44,10 +52,16 @@ import {
   RiPriceTag3Line,
   RiDeleteBinLine,
   RiUserVoiceLine,
+  RiRefreshLine,
+  RiPresentationLine,
+  RiExternalLinkLine,
+  RiFocus3Line,
+  RiShieldCheckLine,
 } from "react-icons/ri";
 
 type DetailTab =
   | "overview"
+  | "analysis"
   | "pipeline"
   | "activities"
   | "notes"
@@ -76,6 +90,18 @@ export default function ProspectDetailPage({
   const { showToast } = useToast();
 
   const business = getProspectById(resolvedParams.id);
+
+  const {
+    getAnalysis,
+    getAnalysisStatus,
+    getAnalysisProgress,
+    analyzeProspect,
+  } = useAnalysis();
+
+  const analysis = business ? getAnalysis(business.id) : undefined;
+  const analysisStatus = business ? getAnalysisStatus(business.id) : "Not Analyzed";
+  const analysisProgress = business ? getAnalysisProgress(business.id) : undefined;
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
 
   // Active tab state
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
@@ -182,6 +208,11 @@ export default function ProspectDetailPage({
 
   const tabs: Array<{ id: DetailTab; label: string; count?: number }> = [
     { id: "overview", label: "Overview" },
+    {
+      id: "analysis",
+      label: "AI Business Analysis",
+      count: analysis ? analysis.opportunities.length : undefined,
+    },
     { id: "pipeline", label: "Pipeline Stepper" },
     { id: "activities", label: "Activity Timeline", count: business.activityHistory.length },
     { id: "notes", label: "Internal Notes", count: business.notes.length },
@@ -246,6 +277,17 @@ export default function ProspectDetailPage({
         }
         actions={
           <div className="flex items-center gap-2 flex-wrap">
+            <Link href={`/prospects/${business.id}/analysis`}>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-[#8B5CF6]/30 text-[#6D28D9] bg-[#FAF5FF] hover:bg-[#F5F3FF]"
+                leftIcon={<RiSparkling2Fill className="h-3.5 w-3.5 text-[#8B5CF6]" />}
+              >
+                {analysis ? "View Analysis" : "Analyze Business"}
+              </Button>
+            </Link>
+
             <Button
               size="sm"
               variant="secondary"
@@ -332,6 +374,164 @@ export default function ProspectDetailPage({
                   {business.suggestedAngle}
                 </p>
               </div>
+
+              {/* MAJOR SECTION: NEXUS Business Analysis */}
+              <Card
+                padding="md"
+                className="border-[#DDD6FE] bg-gradient-to-br from-white to-[#FAF5FF] shadow-xs space-y-4"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#EDE9FE] pb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-xl bg-[#8B5CF6]/10 text-[#8B5CF6]">
+                      <RiSparkling2Fill className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-2">
+                        NEXUS Business Analysis
+                        {analysis && (
+                          <span className="text-[10px] font-bold text-[#8B5CF6] bg-[#F5F3FF] border border-[#DDD6FE] px-2 py-0.5 rounded-full">
+                            v{analysis.version}
+                          </span>
+                        )}
+                      </h4>
+                      <p className="text-xs text-[#64748B]">
+                        Autonomous digital presence evaluation & conversion opportunity mapping.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {analysis ? (
+                      <>
+                        <span
+                          className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${getStatusBadgeProps(analysisStatus).bg} ${getStatusBadgeProps(analysisStatus).text} ${getStatusBadgeProps(analysisStatus).border}`}
+                        >
+                          {getStatusBadgeProps(analysisStatus).label}
+                        </span>
+                        <span
+                          className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${getConfidenceBadgeProps(analysis.confidence).bg} ${getConfidenceBadgeProps(analysis.confidence).text} ${getConfidenceBadgeProps(analysis.confidence).border}`}
+                        >
+                          {analysis.confidence} Confidence
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#F1F5F9] text-[#64748B] border border-[#E2E8F0]">
+                        Not Analyzed Yet
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {analysis ? (
+                  <div className="space-y-4">
+                    {/* Key Findings Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div className="p-3 bg-white rounded-xl border border-[#E2E8F0] space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#2563EB] block">
+                          Primary Opportunity
+                        </span>
+                        <p className="font-bold text-[#0F172A]">
+                          {analysis.primaryOpportunity}
+                        </p>
+                        <p className="text-[11px] text-[#64748B] line-clamp-2">
+                          {analysis.opportunities[0]?.description}
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-white rounded-xl border border-[#E2E8F0] space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#10B981] block">
+                          Recommended Solution Package
+                        </span>
+                        <p className="font-bold text-[#0F172A]">
+                          {analysis.recommendedSolution}
+                        </p>
+                        <p className="text-[11px] text-[#64748B] line-clamp-2">
+                          {analysis.recommendedServices[0]?.service} + WhatsApp Automation
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Metadata strip */}
+                    <div className="flex items-center justify-between text-[11px] text-[#64748B] pt-1 border-t border-[#EDE9FE]">
+                      <span>
+                        Last Analyzed: {new Date(analysis.generatedAt).toLocaleString()}
+                      </span>
+                      <span className="text-[#8B5CF6] font-semibold">
+                        Readiness: {analysis.readiness.score}/5 Areas Audited
+                      </span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          leftIcon={
+                            <RiRefreshLine
+                              className={`h-3.5 w-3.5 ${
+                                analysisStatus === "Analyzing" ? "animate-spin" : ""
+                              }`}
+                            />
+                          }
+                          isLoading={analysisStatus === "Analyzing"}
+                          onClick={async () => {
+                            try {
+                              const res = await analyzeProspect(business, true);
+                              showToast(`Analysis regenerated (v${res.version})`, "success");
+                            } catch {
+                              showToast("Failed to regenerate analysis.", "error");
+                            }
+                          }}
+                        >
+                          Regenerate Analysis
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          leftIcon={<RiPresentationLine className="h-3.5 w-3.5" />}
+                          onClick={() => setIsDemoModalOpen(true)}
+                        >
+                          Prepare Demo
+                        </Button>
+                      </div>
+
+                      <Link href={`/prospects/${business.id}/analysis`}>
+                        <Button
+                          size="sm"
+                          variant="primary"
+                          rightIcon={<RiExternalLinkLine className="h-3.5 w-3.5" />}
+                        >
+                          View Full Analysis
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="py-6 text-center space-y-3">
+                    <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+                      Generate a structured business analysis evaluating digital conversion gaps, solution hypotheses, and demo strategy.
+                    </p>
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      leftIcon={<RiSparkling2Fill className="h-3.5 w-3.5" />}
+                      isLoading={analysisStatus === "Analyzing"}
+                      onClick={async () => {
+                        try {
+                          await analyzeProspect(business);
+                          showToast("AI Business Analysis generated.", "success");
+                        } catch {
+                          showToast("Failed to analyze business.", "error");
+                        }
+                      }}
+                    >
+                      Analyze Business
+                    </Button>
+                  </div>
+                )}
+              </Card>
 
               {/* Core Commercials & Assignment */}
               <Card padding="md" className="border-[#E2E8F0] shadow-xs space-y-4">
@@ -1147,6 +1347,196 @@ export default function ProspectDetailPage({
             </Card>
           </div>
         )}
+
+        {/* TAB: AI BUSINESS ANALYSIS */}
+        {activeTab === "analysis" && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
+              <div>
+                <h3 className="text-sm font-bold text-[#0F172A] flex items-center gap-2">
+                  <RiSparkling2Fill className="h-4 w-4 text-[#8B5CF6]" />
+                  AI Business Analysis Dossier
+                </h3>
+                <p className="text-xs text-[#64748B]">
+                  Deterministic digital presence audit, hypothesis mapping, and demo strategy.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  leftIcon={
+                    <RiRefreshLine
+                      className={`h-3.5 w-3.5 ${
+                        analysisStatus === "Analyzing" ? "animate-spin" : ""
+                      }`}
+                    />
+                  }
+                  isLoading={analysisStatus === "Analyzing"}
+                  onClick={async () => {
+                    try {
+                      const res = await analyzeProspect(business, !!analysis);
+                      showToast(
+                        analysis
+                          ? `Analysis regenerated (v${res.version})`
+                          : "AI Business Analysis generated",
+                        "success"
+                      );
+                    } catch {
+                      showToast("Failed to analyze prospect.", "error");
+                    }
+                  }}
+                >
+                  {analysis ? "Regenerate Analysis" : "Run Analysis"}
+                </Button>
+
+                <Link href={`/prospects/${business.id}/analysis`}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    rightIcon={<RiExternalLinkLine className="h-3.5 w-3.5" />}
+                  >
+                    Open Full Workspace
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {analysis ? (
+              <div className="space-y-6">
+                {/* Executive Summary */}
+                <Card padding="md" className="border-[#DDD6FE] bg-gradient-to-br from-white to-[#FAF5FF] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#7C3AED] uppercase tracking-wider">
+                      Executive Summary & Strategy
+                    </span>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getConfidenceBadgeProps(analysis.confidence).bg} ${getConfidenceBadgeProps(analysis.confidence).text} ${getConfidenceBadgeProps(analysis.confidence).border}`}
+                    >
+                      {analysis.confidence} Confidence
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#334155] leading-relaxed">
+                    {analysis.summary}
+                  </p>
+                </Card>
+
+                {/* Primary Opportunity & Solution Package */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card padding="md" className="border-[#E2E8F0] space-y-2">
+                    <span className="text-xs font-bold text-[#2563EB] uppercase tracking-wider flex items-center gap-1.5">
+                      <RiFocus3Line className="h-4 w-4" />
+                      Primary Opportunity
+                    </span>
+                    <h4 className="text-sm font-bold text-[#0F172A]">
+                      {analysis.primaryOpportunity}
+                    </h4>
+                    <p className="text-xs text-[#475569] leading-relaxed">
+                      {analysis.opportunities[0]?.description}
+                    </p>
+                    <div className="pt-2 text-xs font-semibold text-[#10B981]">
+                      {analysis.opportunities[0]?.potentialValue}
+                    </div>
+                  </Card>
+
+                  <Card padding="md" className="border-[#E2E8F0] space-y-2">
+                    <span className="text-xs font-bold text-[#10B981] uppercase tracking-wider flex items-center gap-1.5">
+                      <RiShieldCheckLine className="h-4 w-4" />
+                      Recommended Solution
+                    </span>
+                    <h4 className="text-sm font-bold text-[#0F172A]">
+                      {analysis.recommendedSolution}
+                    </h4>
+                    <p className="text-xs text-[#475569] leading-relaxed">
+                      Deploy 24/7 AI Receptionist + Automated WhatsApp response workflow straight to staff devices.
+                    </p>
+                  </Card>
+                </div>
+
+                {/* Observations & Problems */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card padding="md" className="border-[#E2E8F0] space-y-3">
+                    <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider border-b border-[#F1F5F9] pb-2">
+                      Key Research Observations ({analysis.observations.length})
+                    </h4>
+                    <div className="space-y-2 text-xs">
+                      {analysis.observations.slice(0, 3).map((obs) => (
+                        <div key={obs.id} className="p-2.5 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0] space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-[#0F172A]">{obs.title}</span>
+                            <span className="text-[10px] font-semibold text-[#64748B]">{obs.category}</span>
+                          </div>
+                          <p className="text-[11px] text-[#475569] line-clamp-2">{obs.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+
+                  <Card padding="md" className="border-[#E2E8F0] space-y-3">
+                    <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider border-b border-[#F1F5F9] pb-2">
+                      Inferred Problem Hypotheses ({analysis.problems.length})
+                    </h4>
+                    <div className="space-y-2 text-xs">
+                      {analysis.problems.slice(0, 3).map((prob) => (
+                        <div key={prob.id} className="p-2.5 bg-[#FFFBEB]/50 rounded-lg border border-[#FDE68A] space-y-1">
+                          <span className="font-bold text-[#92400E] block">{prob.title}</span>
+                          <p className="text-[11px] text-[#78350F] line-clamp-2">{prob.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Direct Link Banner to Full Workspace */}
+                <div className="p-4 rounded-xl bg-gradient-to-r from-[#EFF6FF] to-[#FAF5FF] border border-[#BFDBFE] flex items-center justify-between gap-4">
+                  <div>
+                    <h4 className="text-xs font-bold text-[#1E40AF]">
+                      Detailed Opportunity Map, Solution Architecture & Demo Strategy Available
+                    </h4>
+                    <p className="text-[11px] text-[#475569]">
+                      Inspect complete progression chains, adaptive system diagrams, and copy outreach hooks.
+                    </p>
+                  </div>
+                  <Link href={`/prospects/${business.id}/analysis`}>
+                    <Button size="sm" variant="primary" rightIcon={<RiExternalLinkLine className="h-3.5 w-3.5" />}>
+                      Open Full Analysis
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <Card padding="lg" className="border-[#E2E8F0] text-center space-y-3 py-10">
+                <div className="h-12 w-12 rounded-xl bg-[#F5F3FF] text-[#8B5CF6] flex items-center justify-center mx-auto">
+                  <RiSparkling2Fill className="h-6 w-6" />
+                </div>
+                <h4 className="text-sm font-bold text-[#0F172A]">
+                  No analysis generated for {business.businessName} yet
+                </h4>
+                <p className="text-xs text-[#64748B] max-w-sm mx-auto">
+                  Run the AI Analysis Engine to discover conversion friction, infer potential bottlenecks, and generate demo recommendations.
+                </p>
+                <div className="pt-2">
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    leftIcon={<RiSparkling2Fill className="h-3.5 w-3.5" />}
+                    onClick={async () => {
+                      try {
+                        await analyzeProspect(business);
+                        showToast("AI Business Analysis generated.", "success");
+                      } catch {
+                        showToast("Failed to analyze business.", "error");
+                      }
+                    }}
+                  >
+                    Analyze Business Now
+                  </Button>
+                </div>
+              </Card>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Edit Prospect Modal */}
@@ -1183,6 +1573,27 @@ export default function ProspectDetailPage({
         onClose={() => setIsFollowUpModalOpen(false)}
         onSubmit={handleScheduleFollowUpSubmit}
       />
+
+      {/* Analyzing Simulation Modal */}
+      <AnalyzingStateModal
+        isOpen={analysisStatus === "Analyzing"}
+        stage={analysisProgress?.stage || "Processing business audit..."}
+        percent={analysisProgress?.percent || 20}
+        businessName={business.businessName}
+      />
+
+      {/* Prepare Demo Modal */}
+      {analysis && (
+        <PrepareDemoModal
+          isOpen={isDemoModalOpen}
+          onClose={() => setIsDemoModalOpen(false)}
+          prospect={business}
+          readiness={analysis.readiness}
+          onProceedToDemo={() => {
+            showToast("Demo specifications ready. Proceeding to Demo Generator...", "success");
+          }}
+        />
+      )}
     </AppLayout>
   );
 }

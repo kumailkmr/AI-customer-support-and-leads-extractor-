@@ -139,11 +139,13 @@ export interface CrmFilterState {
   source: string;
   followUp: string;
   sortBy: string;
+  analysisStatus?: string;
 }
 
 export function filterAndSortProspects(
   prospects: BusinessProspect[],
-  filters: CrmFilterState
+  filters: CrmFilterState,
+  analysisStatuses?: Record<string, string>
 ): BusinessProspect[] {
   const q = filters.search.trim().toLowerCase();
 
@@ -195,13 +197,21 @@ export function filterAndSortProspects(
         (filters.followUp === "Upcoming" && followUpStatus === "upcoming") ||
         (filters.followUp === "No Follow-Up" && (followUpStatus === "none" || !p.nextFollowUpAt));
 
+      // Analysis status match
+      let matchesAnalysis = true;
+      if (filters.analysisStatus && filters.analysisStatus !== "All" && analysisStatuses) {
+        const itemStatus = analysisStatuses[p.id.toLowerCase()] || "Not Analyzed";
+        matchesAnalysis = itemStatus.toLowerCase() === filters.analysisStatus.toLowerCase();
+      }
+
       return (
         matchesSearch &&
         matchesStatus &&
         matchesIndustry &&
         matchesOpportunity &&
         matchesSource &&
-        matchesFollowUp
+        matchesFollowUp &&
+        matchesAnalysis
       );
     })
     .sort((a, b) => {
