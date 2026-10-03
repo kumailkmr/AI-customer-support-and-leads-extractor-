@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { IntegrationCard } from "@/components/ui/IntegrationCard";
@@ -283,11 +284,20 @@ export default function SettingsPage() {
           {/* Section: Integrations */}
           {activeTab === "integrations" && (
             <div className="space-y-4">
-              <div className="border-b border-[#E2E8F0] pb-2">
-                <h3 className="text-sm font-bold text-[#0F172A]">Omnichannel Channel Status</h3>
-                <p className="text-xs text-[#64748B]">
-                  Simulated connection states for Instagram, WhatsApp, Facebook, Website, and Email.
-                </p>
+              <div className="border-b border-[#E2E8F0] pb-3 flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-bold text-[#0F172A]">Omnichannel Channel Status</h3>
+                  <p className="text-xs text-[#64748B]">
+                    Simulated connection states for Instagram, WhatsApp, Facebook, Website, and Email.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Link href="/settings/channels">
+                    <Button size="sm" variant="primary">
+                      Manage Channels OS →
+                    </Button>
+                  </Link>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

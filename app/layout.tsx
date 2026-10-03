@@ -25,6 +25,7 @@ export const viewport: Viewport = {
 import { ProspectsProvider } from "@/lib/store/prospects-store";
 import { AnalysisProvider } from "@/lib/store/analysis-store";
 import { LeadsProvider } from "@/lib/store/leads-store";
+import { ChannelsProvider } from "@/lib/store/channels-store";
 import { ToastProvider } from "@/components/ui/Toast";
 
 export default function RootLayout({
@@ -38,7 +39,9 @@ export default function RootLayout({
         <ToastProvider>
           <ProspectsProvider>
             <AnalysisProvider>
-              <LeadsProvider>{children}</LeadsProvider>
+              <LeadsProvider>
+                <ChannelsProvider>{children}</ChannelsProvider>
+              </LeadsProvider>
             </AnalysisProvider>
           </ProspectsProvider>
         </ToastProvider>

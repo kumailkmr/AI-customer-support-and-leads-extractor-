@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyStateCard } from "@/components/ui/EmptyStateCard";
 import { useToast } from "@/components/ui/Toast";
 import { useLeads } from "@/lib/store/leads-store";
+import { useChannels } from "@/lib/store/channels-store";
 import { ClientLeadStatus, QualificationValue } from "@/types/leads";
 import {
   LEAD_STATUS_CONFIG,
@@ -49,14 +50,23 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
   const {
     getLead,
     getConversation,
+    conversations: allConversations,
     updateLeadStatus,
     updateQualificationCriterion,
     addLeadNote,
     scheduleLeadFollowUp,
   } = useLeads();
+  const { getIdentitiesForLead } = useChannels();
 
   const lead = getLead(resolvedParams.id);
   const conversation = lead?.conversationId ? getConversation(lead.conversationId) : undefined;
+  const identities = lead ? getIdentitiesForLead(lead.id) : [];
+  const crossChannelConversations = React.useMemo(() => {
+    if (!lead) return [];
+    return allConversations.filter(
+      (c) => c.leadId === lead.id || (c.clientName === lead.clientName && c.leadName === lead.name)
+    );
+  }, [allConversations, lead]);
 
   const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
@@ -235,50 +245,78 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
             onUpdateCriterion={handleUpdateCriterion}
           />
 
-          {/* Live Conversation Preview */}
+          {/* Cross-Channel Conversation History */}
           <Card padding="md" className="border-[#E2E8F0] space-y-3">
             <CardHeader
-              title="Connected Omnichannel Dialogue"
-              subtitle={`Simulated chat stream over ${lead.channel}`}
+              title="Cross-Channel Conversation History"
+              subtitle={`Unified customer dialogue across ${crossChannelConversations.length} channel threads`}
               action={
-                lead.conversationId ? (
-                  <Link
-                    href={`/inbox?conversationId=${lead.conversationId}`}
-                    className="text-xs font-semibold text-[#2563EB] hover:underline flex items-center gap-1"
-                  >
-                    <span>Open in Live Inbox</span>
-                    <RiChat1Line className="h-3.5 w-3.5" />
-                  </Link>
-                ) : undefined
+                <Link
+                  href="/inbox"
+                  className="text-xs font-semibold text-[#2563EB] hover:underline flex items-center gap-1"
+                >
+                  <span>Open in Live Inbox</span>
+                  <RiChat1Line className="h-3.5 w-3.5" />
+                </Link>
               }
             />
 
-            {conversation ? (
-              <div className="space-y-2.5 max-h-64 overflow-y-auto p-2 bg-[#F8FAFC] rounded-xl border border-[#F1F5F9]">
-                {conversation.messages.map((m) => (
+            {crossChannelConversations.length > 0 ? (
+              <div className="space-y-3">
+                {crossChannelConversations.map((c) => (
                   <div
-                    key={m.id}
-                    className={`p-2.5 rounded-xl text-xs max-w-[85%] ${
-                      m.sender === "lead"
-                        ? "bg-white border border-[#E2E8F0] text-[#0F172A] mr-auto"
-                        : m.sender === "ai"
-                        ? "bg-[#F5F3FF] border border-[#DDD6FE] text-[#5B21B6] ml-auto"
-                        : "bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] ml-auto"
-                    }`}
+                    key={c.id}
+                    className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-2 text-xs"
                   >
-                    <div className="flex items-center justify-between gap-2 text-[10px] text-[#94A3B8] mb-1">
-                      <span className="font-bold uppercase">
-                        {m.sender === "lead" ? lead.name : m.sender === "ai" ? "NEXUS AI Agent" : "Team Member"}
-                      </span>
-                      <span>{m.timestamp}</span>
+                    <div className="flex items-center justify-between pb-1.5 border-b border-[#E2E8F0]">
+                      <div className="flex items-center gap-2">
+                        <span className="p-1 rounded-md bg-white border border-[#CBD5E1]">
+                          {getChannelIcon(c.channel)}
+                        </span>
+                        <strong className="text-[#0F172A]">{c.channel}</strong>
+                        {c.channelHandle && (
+                          <span className="font-mono text-[10px] text-[#64748B]">
+                            ({c.channelHandle})
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] text-[#94A3B8]">{c.lastMessageAt}</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-white text-[#0F172A] border border-[#CBD5E1]">
+                          {c.status}
+                        </span>
+                      </div>
                     </div>
-                    <p className="leading-relaxed">{m.content}</p>
+
+                    {/* Messages snippet */}
+                    <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                      {c.messages.map((m) => (
+                        <div
+                          key={m.id}
+                          className={`p-2 rounded-lg text-xs max-w-[90%] ${
+                            m.sender === "lead"
+                              ? "bg-white border border-[#E2E8F0] text-[#0F172A] mr-auto"
+                              : m.sender === "ai"
+                              ? "bg-[#FAF5FF] border border-[#DDD6FE] text-[#5B21B6] ml-auto"
+                              : "bg-[#EFF6FF] border border-[#BFDBFE] text-[#1D4ED8] ml-auto"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2 text-[9px] text-[#94A3B8] mb-0.5">
+                            <span className="font-bold">
+                              {m.sender === "lead" ? lead.name : m.sender === "ai" ? "AI Agent" : "Specialist"}
+                            </span>
+                            <span>{m.timestamp}</span>
+                          </div>
+                          <p className="leading-snug">{m.content}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="py-6 text-center text-xs text-[#94A3B8]">
-                No live conversation linked to this lead yet.
+                No cross-channel conversations recorded yet.
               </div>
             )}
           </Card>
@@ -383,6 +421,69 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
                   ))}
                 </div>
               </div>
+            </div>
+          </Card>
+
+          {/* Channel Identities (Unified Omnichannel Mapping) */}
+          <Card padding="md" className="border-[#E2E8F0] space-y-3">
+            <CardHeader
+              title="Channel Identities"
+              subtitle="Unified customer accounts mapped across platforms"
+            />
+
+            <div className="space-y-2 text-xs">
+              {identities.length > 0 ? (
+                identities.map((idnt) => (
+                  <div
+                    key={idnt.id}
+                    className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[#0F172A] flex items-center gap-1.5 capitalize">
+                        {getChannelIcon(
+                          idnt.channelType === "instagram"
+                            ? "Instagram"
+                            : idnt.channelType === "whatsapp"
+                            ? "WhatsApp"
+                            : idnt.channelType === "website"
+                            ? "Website Chat"
+                            : idnt.channelType === "email"
+                            ? "Email"
+                            : "Facebook"
+                        )}
+                        <span>{idnt.channelType}</span>
+                      </span>
+                      <span className="text-[10px] text-[#047857] bg-[#ECFDF5] border border-[#A7F3D0] px-1.5 py-0.2 rounded font-bold">
+                        Linked
+                      </span>
+                    </div>
+
+                    <div className="font-mono text-xs text-[#2563EB] font-bold">
+                      {idnt.identifier}
+                    </div>
+
+                    <div className="text-[10px] text-[#94A3B8] flex items-center justify-between pt-0.5">
+                      <span>ID: {idnt.externalUserId}</span>
+                      <span>Seen: {new Date(idnt.lastSeenAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-[#0F172A] flex items-center gap-1.5">
+                      {getChannelIcon(lead.channel)}
+                      <span>{lead.channel}</span>
+                    </span>
+                    <span className="text-[10px] text-[#2563EB] bg-[#EFF6FF] border border-[#BFDBFE] px-1.5 py-0.2 rounded font-bold">
+                      Primary
+                    </span>
+                  </div>
+                  <div className="font-mono text-xs text-[#2563EB] font-bold">
+                    {lead.phone || lead.email || "Web Visitor"}
+                  </div>
+                </div>
+              )}
             </div>
           </Card>
 

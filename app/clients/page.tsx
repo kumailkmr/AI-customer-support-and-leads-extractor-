@@ -71,6 +71,11 @@ export default function ClientsPage() {
         }
         actions={
           <div className="flex items-center gap-2">
+            <Link href="/settings/channels">
+              <Button size="sm" variant="outline">
+                Channels OS
+              </Button>
+            </Link>
             <span className="text-xs font-medium text-[#64748B] bg-white border border-[#E2E8F0] px-2.5 py-1 rounded-lg">
               Demo Data
             </span>
@@ -134,9 +139,12 @@ export default function ClientsPage() {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-bold text-[#0F172A]">
+                          <Link
+                            href={`/clients/${client.id}`}
+                            className="text-sm font-bold text-[#0F172A] hover:text-[#2563EB] transition-colors"
+                          >
                             {client.businessName}
-                          </h4>
+                          </Link>
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                               client.status === "Active"
@@ -217,9 +225,9 @@ export default function ClientsPage() {
                   </span>
 
                   <div className="flex items-center gap-2">
-                    <Link href={`/leads`}>
+                    <Link href={`/clients/${client.id}`}>
                       <Button size="sm" variant="outline" rightIcon={<RiArrowRightLine className="h-3 w-3" />}>
-                        View Leads
+                        Workspace
                       </Button>
                     </Link>
                     <Link href={`/inbox`}>

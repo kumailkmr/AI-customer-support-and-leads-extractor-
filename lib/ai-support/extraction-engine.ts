@@ -1,7 +1,7 @@
 import { ChatMessage, ExtractedLeadInfo, ClientLeadIntent } from "@/types/leads";
 import { detectIntent } from "./intent-engine";
 
-export function extractLeadInfo(messages: ChatMessage[]): ExtractedLeadInfo {
+export function extractLeadInfo(input: ChatMessage[] | string): ExtractedLeadInfo {
   let name: string | undefined;
   let email: string | undefined;
   let phone: string | undefined;
@@ -9,7 +9,7 @@ export function extractLeadInfo(messages: ChatMessage[]): ExtractedLeadInfo {
   let preferredDate: string | undefined;
   let detectedLeadIntent: ClientLeadIntent | undefined;
 
-  const combinedText = messages.map((m) => m.content).join(" \n ");
+  const combinedText = typeof input === "string" ? input : input.map((m) => m.content).join(" \n ");
 
   // 1. Phone extraction (international or standard local numbers)
   const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\b\d{10}\b/;
@@ -67,10 +67,13 @@ export function extractLeadInfo(messages: ChatMessage[]): ExtractedLeadInfo {
   }
 
   // 6. Intent detection
-  const leadMessages = messages.filter((m) => m.sender === "lead");
+  const leadMessages = Array.isArray(input) ? input.filter((m) => m.sender === "lead") : [];
   if (leadMessages.length > 0) {
     const latestLeadText = leadMessages[leadMessages.length - 1].content;
     const res = detectIntent(latestLeadText);
+    detectedLeadIntent = res.intent;
+  } else if (typeof input === "string") {
+    const res = detectIntent(input);
     detectedLeadIntent = res.intent;
   }
 

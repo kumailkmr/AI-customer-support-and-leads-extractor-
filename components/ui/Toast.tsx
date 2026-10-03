@@ -19,8 +19,16 @@ export interface ToastMessage {
   duration?: number;
 }
 
+export interface ToastOptions {
+  title?: string;
+  description?: string;
+  message?: string;
+  variant?: "success" | "info" | "warning" | "danger" | "error" | "neutral";
+}
+
 interface ToastContextType {
   showToast: (message: string, type?: ToastType, title?: string) => void;
+  addToast: (options: ToastOptions) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -51,8 +59,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     [removeToast]
   );
 
+  const addToast = useCallback(
+    (options: ToastOptions) => {
+      const type: ToastType =
+        options.variant === "danger" || options.variant === "error"
+          ? "error"
+          : options.variant === "warning"
+          ? "warning"
+          : options.variant === "info"
+          ? "info"
+          : "success";
+      showToast(options.description || options.message || "", type, options.title);
+    },
+    [showToast]
+  );
+
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={{ showToast, addToast }}>
       {children}
       {/* Toast Overlay Container */}
       <div className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 max-w-sm w-full pointer-events-none p-2">

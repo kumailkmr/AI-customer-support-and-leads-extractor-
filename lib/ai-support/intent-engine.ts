@@ -104,3 +104,5 @@ export function detectIntent(text: string): {
 
   return { intent: "Information Request", confidence: 0.65 };
 }
+
+export const classifyIntent = detectIntent;

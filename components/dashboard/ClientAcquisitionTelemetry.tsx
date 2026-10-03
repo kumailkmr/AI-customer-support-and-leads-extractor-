@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { useLeads } from "@/lib/store/leads-store";
+import { useChannels } from "@/lib/store/channels-store";
 import {
   RiUserVoiceLine,
   RiCheckDoubleLine,
@@ -16,10 +17,16 @@ import {
   RiWhatsappLine,
   RiMailLine,
   RiArrowRightLine,
+  RiSettings4Line,
 } from "react-icons/ri";
 
 export function ClientAcquisitionTelemetry() {
   const { leadMetrics, conversationMetrics } = useLeads();
+  const { channels } = useChannels();
+
+  const activeChannelsCount = channels.filter(
+    (c) => c.status === "MOCK" || c.status === "CONNECTED"
+  ).length;
 
   const channelItems = [
     { name: "Website Chat", count: conversationMetrics.channelBreakdown["Website Chat"] || 0, icon: RiGlobalLine, color: "text-[#2563EB]" },
@@ -32,14 +39,17 @@ export function ClientAcquisitionTelemetry() {
   return (
     <Card padding="md" className="border-[#E2E8F0] space-y-5">
       <CardHeader
-        title="Client Lead & AI Conversation Telemetry"
-        subtitle="Real-time multi-channel customer acquisition generated across your clients"
+        title="Client Lead & Omnichannel Telemetry"
+        subtitle={`Real-time acquisition across ${activeChannelsCount} active channels in Simulation Mode`}
         action={
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-[#8B5CF6] bg-[#F5F3FF] border border-[#DDD6FE] px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <RiSparkling2Fill className="h-3 w-3" />
-              Live AI Triage
-            </span>
+            <Link
+              href="/settings/channels"
+              className="text-xs font-semibold text-[#8B5CF6] bg-[#F5F3FF] border border-[#DDD6FE] px-2.5 py-1 rounded-lg flex items-center gap-1 hover:bg-[#EDE9FE] transition-colors"
+            >
+              <RiSettings4Line className="h-3 w-3" />
+              <span>Channels OS ({activeChannelsCount})</span>
+            </Link>
             <Link
               href="/leads"
               className="text-xs font-semibold text-[#2563EB] hover:underline flex items-center gap-1"

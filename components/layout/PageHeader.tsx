@@ -8,6 +8,8 @@ export interface PageHeaderProps {
   subtitle?: string;
   badge?: React.ReactNode;
   actions?: React.ReactNode;
+  action?: React.ReactNode;
+  breadcrumbs?: Array<{ label: string; href?: string }>;
   className?: string;
 }
 
@@ -16,8 +18,12 @@ export function PageHeader({
   subtitle,
   badge,
   actions,
+  action,
+  breadcrumbs,
   className,
 }: PageHeaderProps) {
+  const renderedActions = action || actions;
+
   return (
     <div
       className={cn(
@@ -39,9 +45,9 @@ export function PageHeader({
         )}
       </div>
 
-      {actions && (
+      {renderedActions && (
         <div className="flex items-center gap-2.5 flex-wrap flex-shrink-0">
-          {actions}
+          {renderedActions}
         </div>
       )}
     </div>
