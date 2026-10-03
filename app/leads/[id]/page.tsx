@@ -22,6 +22,8 @@ import { formatCurrency } from "@/lib/utils";
 import { LeadQualificationPanel } from "@/components/leads/LeadQualificationPanel";
 import { ScheduleFollowUpModal } from "@/components/leads/ScheduleFollowUpModal";
 import { AddNoteModal } from "@/components/leads/AddNoteModal";
+import { useFollowUps } from "@/lib/store/follow-up-store";
+import { CreateFollowUpModal } from "@/components/follow-ups/CreateFollowUpModal";
 
 import {
   RiArrowLeftLine,
@@ -57,6 +59,7 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
     scheduleLeadFollowUp,
   } = useLeads();
   const { getIdentitiesForLead } = useChannels();
+  const { followUps } = useFollowUps();
 
   const lead = getLead(resolvedParams.id);
   const conversation = lead?.conversationId ? getConversation(lead.conversationId) : undefined;
@@ -68,7 +71,15 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
     );
   }, [allConversations, lead]);
 
+  const leadFollowUps = React.useMemo(() => {
+    if (!lead) return [];
+    return followUps.filter(
+      (f) => f.targetId === lead.id || f.targetName.toLowerCase() === lead.name.toLowerCase()
+    );
+  }, [followUps, lead]);
+
   const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
+  const [isEngineFollowUpModalOpen, setIsEngineFollowUpModalOpen] = useState(false);
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
 
   if (!lead) {
@@ -490,26 +501,68 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
           {/* Follow-Up Card */}
           <Card padding="md" className="border-[#E2E8F0] space-y-3">
             <CardHeader
-              title="Next Action & Follow-Up"
+              title="Automated Follow-Ups"
               subtitle="Scheduled engagement pipeline"
               action={
-                <Button size="sm" variant="secondary" onClick={() => setIsFollowUpModalOpen(true)}>
+                <Button size="sm" variant="secondary" onClick={() => setIsEngineFollowUpModalOpen(true)}>
                   Schedule
                 </Button>
               }
             />
 
-            <div className="p-3 rounded-xl bg-[#FFFBEB] border border-[#FDE68A] space-y-1 text-xs">
-              <div className="flex items-center gap-1.5 font-bold text-[#B45309]">
-                <RiCalendarEventLine className="h-4 w-4" />
-                <span>{lead.nextFollowUpAt || "No follow-up active"}</span>
+            {leadFollowUps.length > 0 ? (
+              <div className="space-y-2 text-xs">
+                {leadFollowUps.map((fu) => (
+                  <div
+                    key={fu.id}
+                    className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-[#0F172A] capitalize">
+                        {fu.channel} • {fu.type.replace(/_/g, " ")}
+                      </span>
+                      <span
+                        className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                          fu.status === "DUE"
+                            ? "bg-[#FEF3C7] text-[#B45309]"
+                            : fu.status === "SENT"
+                            ? "bg-[#ECFDF5] text-[#047857]"
+                            : "bg-[#EFF6FF] text-[#2563EB]"
+                        }`}
+                      >
+                        {fu.status}
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] text-[#64748B] line-clamp-2">
+                      &ldquo;{fu.message}&rdquo;
+                    </p>
+
+                    <div className="flex items-center justify-between text-[10px] text-[#94A3B8] pt-1">
+                      <span>Due: {new Date(fu.dueAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                      <Link
+                        href={`/follow-ups/${fu.id}`}
+                        className="text-[#2563EB] hover:underline font-bold"
+                      >
+                        Inspect →
+                      </Link>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p className="text-[11px] text-[#92400E]">
-                {lead.nextFollowUpAt
-                  ? "Automated WhatsApp or human callback reminder pending."
-                  : "Consider scheduling a check-in to advance lead qualification."}
-              </p>
-            </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-[#FFFBEB] border border-[#FDE68A] space-y-1 text-xs">
+                <div className="flex items-center gap-1.5 font-bold text-[#B45309]">
+                  <RiCalendarEventLine className="h-4 w-4" />
+                  <span>{lead.nextFollowUpAt || "No follow-up active"}</span>
+                </div>
+                <p className="text-[11px] text-[#92400E]">
+                  {lead.nextFollowUpAt
+                    ? "Automated reminder pending."
+                    : "No automated follow-up scheduled. Click Schedule to set one up."}
+                </p>
+              </div>
+            )}
           </Card>
 
           {/* Activity Timeline */}
@@ -542,6 +595,13 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
         onClose={() => setIsFollowUpModalOpen(false)}
         leadName={lead.name}
         onSchedule={handleScheduleFollowUp}
+      />
+
+      <CreateFollowUpModal
+        isOpen={isEngineFollowUpModalOpen}
+        onClose={() => setIsEngineFollowUpModalOpen(false)}
+        defaultTargetType="LEAD"
+        defaultTargetId={lead.id}
       />
 
       <AddNoteModal

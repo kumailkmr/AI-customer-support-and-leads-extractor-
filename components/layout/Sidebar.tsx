@@ -20,6 +20,8 @@ import {
   HiOutlineCog6Tooth,
   HiOutlineSwatch,
   HiOutlineSparkles,
+  HiOutlineBolt,
+  HiOutlineDocumentDuplicate,
 } from "react-icons/hi2";
 
 export interface NavItem {
@@ -110,6 +112,18 @@ export const navigationSections: NavSection[] = [
   {
     title: "SYSTEM",
     items: [
+      {
+        label: "Automation Rules",
+        href: "/settings/automation",
+        icon: HiOutlineBolt,
+        badge: "Engine",
+        badgeVariant: "violet",
+      },
+      {
+        label: "Templates",
+        href: "/settings/templates",
+        icon: HiOutlineDocumentDuplicate,
+      },
       {
         label: "Settings",
         href: "/settings",

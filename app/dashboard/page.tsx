@@ -11,6 +11,7 @@ import { RecentLeadsSection } from "@/components/dashboard/RecentLeadsSection";
 import { RecentConversationsSection } from "@/components/dashboard/RecentConversationsSection";
 import { QuickActionsSection } from "@/components/dashboard/QuickActionsSection";
 import { ClientAcquisitionTelemetry } from "@/components/dashboard/ClientAcquisitionTelemetry";
+import { FollowUpOverviewWidget } from "@/components/dashboard/FollowUpOverviewWidget";
 import { FilterPill } from "@/components/ui/FilterPill";
 import { AIActionButton } from "@/components/ui/AIActionButton";
 import { RiSparkling2Fill } from "react-icons/ri";
@@ -82,6 +83,11 @@ export default function DashboardPage() {
         {/* Client-Facing Acquisition & AI Support Telemetry */}
         <section aria-label="Client Acquisition Telemetry">
           <ClientAcquisitionTelemetry />
+        </section>
+
+        {/* Phase 9: Follow-Up & Automation Overview */}
+        <section aria-label="Follow-Up & Automation Overview">
+          <FollowUpOverviewWidget />
         </section>
 
         {/* Split Grid: Channels & Conversations (Left) + AI Activity (Right) */}

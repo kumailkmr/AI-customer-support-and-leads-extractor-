@@ -26,6 +26,7 @@ import { ProspectsProvider } from "@/lib/store/prospects-store";
 import { AnalysisProvider } from "@/lib/store/analysis-store";
 import { LeadsProvider } from "@/lib/store/leads-store";
 import { ChannelsProvider } from "@/lib/store/channels-store";
+import { FollowUpProvider } from "@/lib/store/follow-up-store";
 import { ToastProvider } from "@/components/ui/Toast";
 
 export default function RootLayout({
@@ -40,7 +41,9 @@ export default function RootLayout({
           <ProspectsProvider>
             <AnalysisProvider>
               <LeadsProvider>
-                <ChannelsProvider>{children}</ChannelsProvider>
+                <ChannelsProvider>
+                  <FollowUpProvider>{children}</FollowUpProvider>
+                </ChannelsProvider>
               </LeadsProvider>
             </AnalysisProvider>
           </ProspectsProvider>

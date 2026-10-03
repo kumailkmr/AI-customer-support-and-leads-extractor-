@@ -22,6 +22,8 @@ import { EditProspectModal } from "@/components/crm/EditProspectModal";
 import { AddActivityModal } from "@/components/crm/AddActivityModal";
 import { AddNoteModal } from "@/components/crm/AddNoteModal";
 import { ScheduleFollowUpModal } from "@/components/crm/ScheduleFollowUpModal";
+import { useFollowUps } from "@/lib/store/follow-up-store";
+import { CreateFollowUpModal } from "@/components/follow-ups/CreateFollowUpModal";
 
 import { useAnalysis } from "@/lib/store/analysis-store";
 import {
@@ -87,6 +89,7 @@ export default function ProspectDetailPage({
     isLoaded,
   } = useProspects();
 
+  const { followUps } = useFollowUps();
   const { showToast } = useToast();
 
   const business = getProspectById(resolvedParams.id);
@@ -111,6 +114,7 @@ export default function ProspectDetailPage({
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
   const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
+  const [isEngineFollowUpModalOpen, setIsEngineFollowUpModalOpen] = useState(false);
 
   // Inline note form state
   const [quickNoteTitle, setQuickNoteTitle] = useState("");
@@ -1065,49 +1069,79 @@ export default function ProspectDetailPage({
             <Card padding="md" className="border-[#E2E8F0] shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-[#F1F5F9] pb-2">
                 <h4 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">
-                  Upcoming Outreach Task
+                  Automated Follow-Up Engine (Phase 9)
                 </h4>
                 <Button
                   size="sm"
                   variant="primary"
-                  onClick={() => setIsFollowUpModalOpen(true)}
+                  onClick={() => setIsEngineFollowUpModalOpen(true)}
+                  className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs"
                 >
-                  Set New Date
+                  Schedule Follow-Up
                 </Button>
               </div>
 
-              {business.followUp ? (
-                <div className="p-4 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF]/40 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#1E40AF]">
-                      Target Date: {business.followUp.date} at {business.followUp.time}
-                    </span>
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
-                        business.followUp.status === "today"
-                          ? "bg-[#FFFBEB] text-[#92400E] border-[#FDE68A]"
-                          : business.followUp.status === "overdue"
-                          ? "bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]"
-                          : "bg-[#EFF6FF] text-[#1E40AF] border-[#BFDBFE]"
-                      }`}
-                    >
-                      {business.followUp.status === "today"
-                        ? "Due Today"
-                        : business.followUp.status === "overdue"
-                        ? "Overdue"
-                        : "Upcoming"}
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#3B82F6] leading-relaxed">
-                    Channel: <strong>{business.followUp.channel}</strong>
-                  </p>
-                  <p className="text-xs text-[#475569] leading-relaxed">
-                    {business.followUp.notes}
-                  </p>
+              {followUps.filter(
+                (f) =>
+                  f.targetType === "PROSPECT" &&
+                  (f.targetId === business.id ||
+                    f.targetName.toLowerCase() === business.businessName.toLowerCase())
+              ).length > 0 ? (
+                <div className="space-y-2.5 text-xs">
+                  {followUps
+                    .filter(
+                      (f) =>
+                        f.targetType === "PROSPECT" &&
+                        (f.targetId === business.id ||
+                          f.targetName.toLowerCase() === business.businessName.toLowerCase())
+                    )
+                    .map((fu) => (
+                      <div
+                        key={fu.id}
+                        className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-[#0F172A] capitalize">
+                            {fu.channel} • {fu.type.replace(/_/g, " ")}
+                          </span>
+                          <span
+                            className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                              fu.status === "DUE"
+                                ? "bg-[#FEF3C7] text-[#B45309]"
+                                : fu.status === "SENT"
+                                ? "bg-[#ECFDF5] text-[#047857]"
+                                : "bg-[#EFF6FF] text-[#2563EB]"
+                            }`}
+                          >
+                            {fu.status}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#64748B] line-clamp-2">
+                          &ldquo;{fu.message}&rdquo;
+                        </p>
+                        <div className="flex items-center justify-between text-[10px] text-[#94A3B8] pt-1">
+                          <span>
+                            Due: {new Date(fu.dueAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                          <Link
+                            href={`/follow-ups/${fu.id}`}
+                            className="text-[#2563EB] hover:underline font-bold"
+                          >
+                            Inspect →
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               ) : (
-                <div className="py-8 text-center text-xs text-[#94A3B8]">
-                  No upcoming follow-up scheduled.
+                <div className="p-4 rounded-xl border border-dashed border-[#CBD5E1] text-center text-xs text-[#64748B] space-y-1">
+                  <div>No automated follow-up scheduled in Engine.</div>
+                  <button
+                    onClick={() => setIsEngineFollowUpModalOpen(true)}
+                    className="text-[#2563EB] hover:underline font-semibold text-xs"
+                  >
+                    + Schedule Automated Outreach Now
+                  </button>
                 </div>
               )}
             </Card>
@@ -1594,6 +1628,14 @@ export default function ProspectDetailPage({
           }}
         />
       )}
+
+      {/* Phase 9 Engine Modal */}
+      <CreateFollowUpModal
+        isOpen={isEngineFollowUpModalOpen}
+        onClose={() => setIsEngineFollowUpModalOpen(false)}
+        defaultTargetType="PROSPECT"
+        defaultTargetId={business.id}
+      />
     </AppLayout>
   );
 }

@@ -9,10 +9,12 @@ import { SearchInput } from "@/components/ui/SearchInput";
 import { useToast } from "@/components/ui/Toast";
 import { useLeads } from "@/lib/store/leads-store";
 import { useChannels } from "@/lib/store/channels-store";
+import { useFollowUps } from "@/lib/store/follow-up-store";
 import { ClientLeadChannel } from "@/types/leads";
 import { LEAD_INTENT_LABELS } from "@/lib/leads/leads-config";
 import { formatCurrency } from "@/lib/utils";
 import { EventSimulatorModal } from "@/components/channels/EventSimulatorModal";
+import { CreateFollowUpModal } from "@/components/follow-ups/CreateFollowUpModal";
 
 import {
   RiGlobalLine,
@@ -54,6 +56,7 @@ export default function InboxPage() {
     createLeadFromConversation,
   } = useLeads();
 
+  const { followUps } = useFollowUps();
   const { addToast } = useToast();
 
   const [selectedConvId, setSelectedConvId] = useState<string>(
@@ -70,6 +73,7 @@ export default function InboxPage() {
   const [mobileActiveView, setMobileActiveView] = useState<"list" | "chat" | "profile">("chat");
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isFollowUpModalOpen, setIsFollowUpModalOpen] = useState(false);
 
   const currentConv = useMemo(() => {
     return (
@@ -82,6 +86,15 @@ export default function InboxPage() {
     if (!currentConv?.leadId) return undefined;
     return leads.find((l) => l.id === currentConv.leadId);
   }, [leads, currentConv]);
+
+  const currentFollowUp = useMemo(() => {
+    return followUps.find(
+      (f) =>
+        (associatedLead && f.targetId === associatedLead.id) ||
+        (currentConv?.leadId && f.targetId === currentConv.leadId) ||
+        f.targetName.toLowerCase() === currentConv?.leadName.toLowerCase()
+    );
+  }, [followUps, associatedLead, currentConv]);
 
   // Filtering conversations list across multi-channel criteria
   const filteredConversations = useMemo(() => {
@@ -520,6 +533,17 @@ export default function InboxPage() {
 
                   {/* Actions / AI Mode Switch */}
                   <div className="flex items-center gap-2">
+                    {currentFollowUp && (
+                      <Link
+                        href={`/follow-ups/${currentFollowUp.id}`}
+                        className="hidden md:flex items-center gap-1.5 text-[10px] font-semibold text-[#8B5CF6] bg-[#F5F3FF] border border-[#DDD6FE] px-2.5 py-1 rounded-full hover:bg-[#EDE9FE] transition-colors"
+                        title={currentFollowUp.triggerReason}
+                      >
+                        <RiTimeLine className="h-3 w-3 text-[#8B5CF6]" />
+                        <span>Follow-Up: <strong className="uppercase">{currentFollowUp.status}</strong></span>
+                      </Link>
+                    )}
+
                     <div className="flex rounded-lg border border-[#E2E8F0] p-0.5 bg-[#F8FAFC]">
                       <button
                         type="button"
@@ -966,6 +990,65 @@ export default function InboxPage() {
                 </Link>
               </div>
             )}
+
+            {/* Automated Follow-Up Section */}
+            <div className="bg-white p-3.5 rounded-xl border border-[#E2E8F0] text-xs space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] block">
+                  Automated Follow-Up
+                </span>
+                <span className="text-[10px] text-[#8B5CF6] font-semibold bg-[#F5F3FF] px-1.5 py-0.2 rounded">
+                  Simulation
+                </span>
+              </div>
+
+              {currentFollowUp ? (
+                <div className="p-2.5 bg-[#F8FAFC] rounded-lg border border-[#F1F5F9] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-[#0F172A]">{currentFollowUp.type.replace(/_/g, " ")}</span>
+                    <span className="text-[10px] font-bold px-1.5 py-0.2 rounded uppercase bg-[#FEF3C7] text-[#B45309]">
+                      {currentFollowUp.status}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#64748B] line-clamp-2">
+                    &ldquo;{currentFollowUp.message}&rdquo;
+                  </p>
+                  <div className="text-[10px] text-[#94A3B8]">
+                    Due: {new Date(currentFollowUp.dueAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </div>
+                  <div className="pt-1 flex items-center justify-between">
+                    <Link
+                      href={`/follow-ups/${currentFollowUp.id}`}
+                      className="text-[11px] text-[#2563EB] hover:underline font-medium"
+                    >
+                      Inspect Details →
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setIsFollowUpModalOpen(true)}
+                      className="text-[10px] text-[#64748B] hover:text-[#0F172A]"
+                    >
+                      Reschedule
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-2.5 bg-[#F8FAFC] rounded-lg text-center space-y-2">
+                  <p className="text-[11px] text-[#64748B]">
+                    No pending automated follow-up scheduled for this conversation.
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full text-xs h-7"
+                    onClick={() => setIsFollowUpModalOpen(true)}
+                  >
+                    <RiTimeLine className="h-3.5 w-3.5 mr-1 text-[#2563EB]" />
+                    Schedule Follow-Up
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -987,6 +1070,14 @@ export default function InboxPage() {
         }
         defaultConversationId={currentConv?.id}
         defaultClientId={currentConv?.clientId}
+      />
+
+      {/* Follow-Up Scheduling Modal */}
+      <CreateFollowUpModal
+        isOpen={isFollowUpModalOpen}
+        onClose={() => setIsFollowUpModalOpen(false)}
+        defaultTargetType="LEAD"
+        defaultTargetId={associatedLead?.id || currentConv?.leadId}
       />
     </AppLayout>
   );
