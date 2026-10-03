@@ -10,6 +10,7 @@ import { AIActivityFeed } from "@/components/dashboard/AIActivityFeed";
 import { RecentLeadsSection } from "@/components/dashboard/RecentLeadsSection";
 import { RecentConversationsSection } from "@/components/dashboard/RecentConversationsSection";
 import { QuickActionsSection } from "@/components/dashboard/QuickActionsSection";
+import { ClientAcquisitionTelemetry } from "@/components/dashboard/ClientAcquisitionTelemetry";
 import { FilterPill } from "@/components/ui/FilterPill";
 import { AIActionButton } from "@/components/ui/AIActionButton";
 import { RiSparkling2Fill } from "react-icons/ri";
@@ -76,6 +77,11 @@ export default function DashboardPage() {
         {/* Sales Pipeline Funnel Progression */}
         <section aria-label="Sales Pipeline Progression">
           <PipelineOverview />
+        </section>
+
+        {/* Client-Facing Acquisition & AI Support Telemetry */}
+        <section aria-label="Client Acquisition Telemetry">
+          <ClientAcquisitionTelemetry />
         </section>
 
         {/* Split Grid: Channels & Conversations (Left) + AI Activity (Right) */}
